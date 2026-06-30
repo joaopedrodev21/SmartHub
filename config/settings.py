@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # Seus apps
     'apps.products',
     'apps.sales',
+    'apps.customers',
+    'apps.accounts' 
 ]
 
 MIDDLEWARE = [
