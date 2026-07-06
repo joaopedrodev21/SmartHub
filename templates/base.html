@@ -9,7 +9,10 @@
 <body>
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'products:product_list' %}">SmartHub CRM</a>
+            <a class="navbar-brand" href="{% url 'home' %}"> SmartHub CRM</a>
+            <div class="navbar-nav">
+                <a class="nav-link d-inline" href="{% url 'products:product_list' %}">Produtos</a>
+            </div>
         </div>
     </nav>
     <div class="container">
