@@ -1,13 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product
 from .forms import ProductForm
 from apps.sales.models import Sale
 from apps.customers.models import Company
 from django.db.models import Sum, Count
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 @login_required
 def home(request):
@@ -29,6 +30,10 @@ def dashboard(request):
         'recent_sales': recent_sales,
     }
     return render(request, 'dashboard.html', context)
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
 
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product

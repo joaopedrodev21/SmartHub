@@ -1,10 +1,9 @@
 from rest_framework import generics, permissions, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Product
 from .serializers import ProductSerializer, CustomerSerializer, CompanySerializer
@@ -12,6 +11,7 @@ from .serializers import ProductSerializer, CustomerSerializer, CompanySerialize
 
 # Auth
 @api_view(['POST'])
+@permission_classes([permissions.AllowAny])
 def register(request):
     username = request.data.get('username')
     email = request.data.get('email')
@@ -38,6 +38,7 @@ def register(request):
 
 
 @api_view(['POST'])
+@permission_classes([permissions.AllowAny])
 def login(request):
     username = request.data.get('username')
     password = request.data.get('password')
