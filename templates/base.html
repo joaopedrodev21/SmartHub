@@ -10,9 +10,19 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}"> SmartHub CRM</a>
-            <div class="navbar-nav">
-                <a class="nav-link d-inline" href="{% url 'products:product_list' %}">Produtos</a>
+            <div class="navbar-nav d-flex flex-row gap-3">
+                <a class="nav-link" href="{% url 'dashboard' %}"> Dashboard</a>
+                <a class="nav-link" href="{% url 'products:product_list' %}"> Produtos</a>
+                <a class="nav-link" href="{% url 'sales:sale_list' %}"> Vendas</a>
             </div>
+        </div>
+        <div class="ms-auto">
+            {% if user.is_authenticated %}
+                <span class="text-light me-2">{{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Sair</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Entrar</a>
+            {% endif %}
         </div>
     </nav>
     <div class="container">

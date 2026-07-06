@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - SmartHub CRM{% endblock %}
+{% block content %}
+
+<h1 class="mb-4"> Dashboard</h1>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="card text-center border-primary h-100">
+            <div class="card-body">
+                <h5 class="card-title text-primary"> Produtos</h5>
+                <p class="display-6 fw-bold">{{ total_products }}</p>
+                <p class="text-muted">Total de produtos cadastrados</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-success h-100">
+            <div class="card-body">
+                <h5 class="card-title text-success"> Estoque</h5>
+                <p class="display-6 fw-bold">{{ total_stock }}</p>
+                <p class="text-muted">Unidades em estoque</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-warning h-100">
+            <div class="card-body">
+                <h5 class="card-title text-warning"> Faturamento</h5>
+                <p class="display-6 fw-bold">R$ {{ total_revenue|floatformat:2 }}</p>
+                <p class="text-muted">Faturamento total</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-info h-100">
+            <div class="card-body">
+                <h5 class="card-title text-info"> Vendas</h5>
+                <p class="display-6 fw-bold">{{ total_sales }}</p>
+                <p class="text-muted">Total de vendas realizadas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Últimas Vendas</h5>
+                <a href="{% url 'sales:sale_list' %}" class="btn btn-sm btn-primary">Ver Todas</a>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Qtd</th>
+                            <th>Total</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sale in recent_sales %}
+                        <tr>
+                            <td>{{ sale.product.name }}</td>
+                            <td>{{ sale.quantity }}</td>
+                            <td>R$ {{ sale.total_price }}</td>
+                            <td>{{ sale.sold_at|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">Nenhuma venda realizada.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

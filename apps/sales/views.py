@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect
 from .models import Sale
 from .forms import SaleForm
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def SaleListView(request):
     sales = Sale.objects.select_related('product').all()
     return render(request, 'sales/list.html', {'sales': sales})
 
 
+@login_required
 def SaleCreateView(request):
     if request.method == 'POST':
         form = SaleForm(request.POST)
