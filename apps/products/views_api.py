@@ -9,7 +9,7 @@ from .models import Product
 from .serializers import ProductSerializer, CustomerSerializer, CompanySerializer
 
 
-# Auth
+# Auth para Regitro de usuários 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def register(request):
@@ -36,7 +36,7 @@ def register(request):
         }
     })
 
-
+#Auth para Login de usuários
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def login(request):
@@ -60,7 +60,8 @@ def login(request):
     })
 
 
-# Products
+# Products 
+#Rota de listagem e criação de produtos
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -72,7 +73,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save()
 
-
+#Rota de detalhes, atualização e exclusão de produtos
 class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -81,7 +82,7 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Product.objects.filter(company__owner=self.request.user)
 
-
+#Rota de detalhes do estoque de produtos
 class ProductStockDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -89,7 +90,6 @@ class ProductStockDetailAPIView(generics.RetrieveAPIView):
 
     def get_queryset(self):
         return Product.objects.filter(company__owner=self.request.user)
-
 
 # Company Revenue (só dono)
 class CompanyRevenueAPIView(generics.GenericAPIView):
