@@ -2,39 +2,39 @@
 {% block title %}Início - SmartHub CRM{% endblock %}
 {% block content %}
 
-<div class="text-center mb-5">
-    <h1 class="display-4"> SmartHub CRM</h1>
-    <p class="lead">Sistema de gestão para loja de tecnologia e games</p>
+<div class="hero p-5 mb-5 text-center">
+  <h1 class="display-4 fw-bold">SmartHub CRM</h1>
+  <p class="lead mb-0">Sistema de gestão para loja de tecnologia e games</p>
 </div>
 
 <div class="row g-4">
-    <div class="col-md-4">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <h5 class="card-title"> Produtos</h5>
-                <p class="card-text">Gerencie seu catálogo de produtos</p>
-                <a href="{% url 'products:product_list' %}" class="btn btn-primary">Ver Produtos</a>
-            </div>
-        </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <h5 class="card-title">📦 Produtos</h5>
+        <p class="card-text text-muted">Gerencie seu catálogo de produtos</p>
+        <a href="{% url 'products:product_list' %}" class="btn btn-primary w-100">Ver Produtos</a>
+      </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <h5 class="card-title"> Vendas</h5>
-                <p class="card-text">Registre novas vendas</p>
-                <a href="{% url 'sales:sale_list' %}" class="btn btn-success">Ver Vendas</a>
-            </div>
-        </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <h5 class="card-title">💰 Vendas</h5>
+        <p class="card-text text-muted">Registre novas vendas</p>
+        <a href="{% url 'sales:sale_list' %}" class="btn btn-success w-100">Ver Vendas</a>
+      </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <h5 class="card-title"> Dashboard</h5>
-                <p class="card-text">Acompanhe métricas da loja</p>
-                <a href="{% url 'dashboard' %}" class="btn btn-info text-white">Ver Dashboard</a>
-            </div>
-        </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <h5 class="card-title">📊 Dashboard</h5>
+        <p class="card-text text-muted">Acompanhe métricas da loja</p>
+        <a href="{% url 'dashboard' %}" class="btn btn-warning text-dark w-100">Ver Dashboard</a>
+      </div>
     </div>
+  </div>
 </div>
 
 {% endblock %}

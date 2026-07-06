@@ -1,31 +1,37 @@
 {% extends 'base.html' %}
 {% block title %}Vendas{% endblock %}
 {% block content %}
-<h1>Vendas</h1>
-<a href="{% url 'sales:sale_create' %}" class="btn btn-primary mb-3">Nova Venda</a>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Produto</th>
-            <th>Quantidade</th>
-            <th>Total</th>
-            <th>Data</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for sale in sales %}
-        <tr>
-            <td>{{ sale.product.name }}</td>
-            <td>{{ sale.quantity }}</td>
-            <td>R$ {{ sale.total_price }}</td>
-            <td>{{ sale.sold_at }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4" class="text-center">Nenhuma venda registrada.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% endblock %}
 
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>💰 Vendas</h1>
+  <a href="{% url 'sales:sale_create' %}" class="btn btn-success">Nova Venda</a>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Produto</th>
+      <th>Quantidade</th>
+      <th>Total</th>
+      <th>Data</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for sale in sales %}
+    <tr>
+      <td>{{ sale.product.name }}</td>
+      <td>{{ sale.quantity }}</td>
+      <td>R$ {{ sale.total_price }}</td>
+      <td>{{ sale.sold_at }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4" class="text-center">Nenhuma venda registrada.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+</parameter>
+</write_to_file>

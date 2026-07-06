@@ -3,9 +3,14 @@
 {% block content %}
 
 <div class="text-center mt-5">
-    <h1 class="display-4"> Você saiu</h1>
-    <p class="lead">Você foi desconectado com sucesso.</p>
-    <a href="{% url 'login' %}" class="btn btn-primary">Entrar novamente</a>
+  <div class="card d-inline-block p-4" style="min-width:320px;">
+    <div class="card-body">
+      <h1 class="display-4">👋</h1>
+      <h5 class="card-title mt-2">Você saiu</h5>
+      <p class="text-muted">Você foi desconectado com sucesso.</p>
+      <a href="{% url 'login' %}" class="btn btn-primary w-100">Entrar novamente</a>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

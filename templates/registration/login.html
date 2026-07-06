@@ -3,20 +3,20 @@
 {% block content %}
 
 <div class="row justify-content-center">
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header text-center">
-                <h4> Login</h4>
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
-                </form>
-            </div>
-        </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header text-center">
+        <h4 class="mb-0">🔐 Login</h4>
+      </div>
+      <div class="card-body p-4">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
 {% endblock %}
