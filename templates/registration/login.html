@@ -6,13 +6,19 @@
   <div class="col-md-4">
     <div class="card">
       <div class="card-header text-center">
-        <h4 class="mb-0">🔐 Login</h4>
+        <div class="d-flex justify-content-center mb-2">
+            <i data-lucide="lock" class="lucide-card"></i>
+        </div>
+        <h4 class="mb-0">Login</h4>
       </div>
       <div class="card-body p-4">
         <form method="post">
           {% csrf_token %}
           {{ form.as_p }}
-          <button type="submit" class="btn btn-primary w-100">Entrar</button>
+          <button type="submit" class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
+            <i data-lucide="log-in" class="lucide-btn-sm"></i>
+            Entrar
+          </button>
         </form>
       </div>
     </div>

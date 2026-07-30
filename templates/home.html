@@ -3,6 +3,9 @@
 {% block content %}
 
 <div class="hero p-5 mb-5 text-center">
+  <div class="d-flex justify-content-center mb-3">
+    <i data-lucide="gamepad-2" class="lucide-hero"></i>
+  </div>
   <h1 class="display-4 fw-bold">SmartHub CRM</h1>
   <p class="lead mb-0">Sistema de gestão para loja de tecnologia e games</p>
 </div>
@@ -10,28 +13,46 @@
 <div class="row g-4">
   <div class="col-md-4">
     <div class="card h-100">
-      <div class="card-body text-center">
-        <h5 class="card-title">📦 Produtos</h5>
+      <div class="card-body text-center d-flex flex-column h-100">
+        <div class="d-flex justify-content-center mb-3">
+            <i data-lucide="package" class="lucide-card text-primary"></i>
+        </div>
+        <h5 class="card-title">Produtos</h5>
         <p class="card-text text-muted">Gerencie seu catálogo de produtos</p>
-        <a href="{% url 'products:product_list' %}" class="btn btn-primary w-100">Ver Produtos</a>
+        <a href="{% url 'products:product_list' %}" class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 mt-auto">
+            <i data-lucide="arrow-right" class="lucide-btn-sm"></i>
+            Ver Produtos
+        </a>
       </div>
     </div>
   </div>
   <div class="col-md-4">
     <div class="card h-100">
-      <div class="card-body text-center">
-        <h5 class="card-title">💰 Vendas</h5>
+      <div class="card-body text-center d-flex flex-column h-100">
+        <div class="d-flex justify-content-center mb-3">
+            <i data-lucide="shopping-cart" class="lucide-card text-success"></i>
+        </div>
+        <h5 class="card-title">Vendas</h5>
         <p class="card-text text-muted">Registre novas vendas</p>
-        <a href="{% url 'sales:sale_list' %}" class="btn btn-success w-100">Ver Vendas</a>
+        <a href="{% url 'sales:sale_list' %}" class="btn btn-success w-100 d-flex align-items-center justify-content-center gap-2 mt-auto">
+            <i data-lucide="arrow-right" class="lucide-btn-sm"></i>
+            Ver Vendas
+        </a>
       </div>
     </div>
   </div>
   <div class="col-md-4">
     <div class="card h-100">
-      <div class="card-body text-center">
-        <h5 class="card-title">📊 Dashboard</h5>
+      <div class="card-body text-center d-flex flex-column h-100">
+        <div class="d-flex justify-content-center mb-3">
+            <i data-lucide="layout-dashboard" class="lucide-card text-warning"></i>
+        </div>
+        <h5 class="card-title">Dashboard</h5>
         <p class="card-text text-muted">Acompanhe métricas da loja</p>
-        <a href="{% url 'dashboard' %}" class="btn btn-warning text-dark w-100">Ver Dashboard</a>
+        <a href="{% url 'dashboard' %}" class="btn btn-warning text-dark w-100 d-flex align-items-center justify-content-center gap-2 mt-auto">
+            <i data-lucide="arrow-right" class="lucide-btn-sm"></i>
+            Ver Dashboard
+        </a>
       </div>
     </div>
   </div>

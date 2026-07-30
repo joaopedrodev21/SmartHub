@@ -5,16 +5,23 @@
 <div class="row justify-content-center">
   <div class="col-md-4">
     <div class="card">
-      <div class="card-header">
-        <h4 class="mb-0">💰 Nova Venda</h4>
+      <div class="card-header d-flex align-items-center gap-2">
+        <i data-lucide="shopping-cart" class="lucide-card-header"></i>
+        <h4 class="mb-0">Nova Venda</h4>
       </div>
       <div class="card-body p-4">
         <form method="post">
           {% csrf_token %}
           {{ form.as_p }}
           <div class="d-flex gap-2 mt-3">
-            <button type="submit" class="btn btn-success flex-fill">Vender</button>
-            <a href="{% url 'sales:sale_list' %}" class="btn btn-secondary flex-fill">Cancelar</a>
+            <button type="submit" class="btn btn-success flex-fill d-flex align-items-center justify-content-center gap-2">
+                <i data-lucide="check" class="lucide-btn-sm"></i>
+                Vender
+            </button>
+            <a href="{% url 'sales:sale_list' %}" class="btn btn-secondary flex-fill d-flex align-items-center justify-content-center gap-2">
+                <i data-lucide="x" class="lucide-btn-sm"></i>
+                Cancelar
+            </a>
           </div>
         </form>
       </div>

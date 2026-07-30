@@ -5,7 +5,8 @@
 <div class="row justify-content-center">
   <div class="col-md-6">
     <div class="card">
-      <div class="card-header">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i data-lucide="{% if form.instance.pk %}pencil{% else %}plus{% endif %}" class="lucide-card-header"></i>
         <h4 class="mb-0">{% if form.instance.pk %}Editar{% else %}Novo{% endif %} Produto</h4>
       </div>
       <div class="card-body p-4">
@@ -13,8 +14,14 @@
           {% csrf_token %}
           {{ form.as_p }}
           <div class="d-flex gap-2 mt-3">
-            <button type="submit" class="btn btn-primary flex-fill">{% if form.instance.pk %}Atualizar{% else %}Criar{% endif %}</button>
-            <a href="{% url 'products:product_list' %}" class="btn btn-secondary flex-fill">Cancelar</a>
+            <button type="submit" class="btn btn-primary flex-fill d-flex align-items-center justify-content-center gap-2">
+                <i data-lucide="{% if form.instance.pk %}save{% else %}check{% endif %}" class="lucide-btn-sm"></i>
+                {% if form.instance.pk %}Atualizar{% else %}Criar{% endif %}
+            </button>
+            <a href="{% url 'products:product_list' %}" class="btn btn-secondary flex-fill d-flex align-items-center justify-content-center gap-2">
+                <i data-lucide="x" class="lucide-btn-sm"></i>
+                Cancelar
+            </a>
           </div>
         </form>
       </div>

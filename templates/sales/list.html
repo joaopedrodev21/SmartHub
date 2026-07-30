@@ -3,35 +3,46 @@
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1>💰 Vendas</h1>
-  <a href="{% url 'sales:sale_create' %}" class="btn btn-success">Nova Venda</a>
+  <div class="d-flex align-items-center gap-2">
+    <i data-lucide="shopping-cart" class="lucide-title"></i>
+    <h1 class="mb-0">Vendas</h1>
+  </div>
+  <a href="{% url 'sales:sale_create' %}" class="btn btn-success d-flex align-items-center gap-2">
+    <i data-lucide="plus" class="lucide-btn-sm"></i>
+    Nova Venda
+  </a>
 </div>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Produto</th>
-      <th>Quantidade</th>
-      <th>Total</th>
-      <th>Data</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for sale in sales %}
-    <tr>
-      <td>{{ sale.product.name }}</td>
-      <td>{{ sale.quantity }}</td>
-      <td>R$ {{ sale.total_price }}</td>
-      <td>{{ sale.sold_at }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="4" class="text-center">Nenhuma venda registrada.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="card">
+  <div class="card-body">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Quantidade</th>
+          <th>Total</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sale in sales %}
+        <tr>
+          <td>{{ sale.product.name }}</td>
+          <td>{{ sale.quantity }}</td>
+          <td>R$ {{ sale.total_price }}</td>
+          <td>{{ sale.sold_at }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-center text-muted py-4">
+            <i data-lucide="inbox" class="lucide-empty"></i>
+            <div class="mt-2">Nenhuma venda registrada.</div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 
 {% endblock %}
-</parameter>
-</write_to_file>

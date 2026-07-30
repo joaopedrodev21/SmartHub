@@ -12,11 +12,11 @@ class ProductSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'name', 'email', 'phone', 'address']
+        fields = ['id', 'name', 'email', 'phone_number', 'address']
         read_only_fields = ['id']
 
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = ['id', 'name', 'email', 'phone', 'address', 'revenue', 'owner']
+        fields = ['id', 'name', 'email', 'phone_number', 'address', 'revenue', 'owner']
         read_only_fields = ['id', 'revenue', 'owner']

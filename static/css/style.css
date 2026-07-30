@@ -123,3 +123,97 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+/* Lucide Icons */
+.lucide-nav-brand {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+.lucide-nav {
+  width: 18px;
+  height: 18px;
+  color: rgba(255,255,255,0.85);
+}
+.lucide-btn-sm {
+  width: 16px;
+  height: 16px;
+}
+.lucide-title {
+  width: 28px;
+  height: 28px;
+  color: var(--dark);
+}
+.lucide-card {
+  width: 32px;
+  height: 32px;
+}
+.lucide-card-header {
+  width: 20px;
+  height: 20px;
+}
+.lucide-hero {
+  width: 48px;
+  height: 48px;
+  color: #fff;
+}
+.lucide-empty {
+  width: 40px;
+  height: 40px;
+  opacity: 0.5;
+}
+.lucide-warning {
+  width: 22px;
+  height: 22px;
+  color: var(--warning);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Navbar layout */
+.navbar .container {
+  padding: 0 12px;
+}
+.navbar-brand span {
+  font-size: 1.25rem;
+}
+
+/* Card header */
+.card-header {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #fff;
+  border-radius: var(--radius) var(--radius) 0 0 !important;
+  padding: 16px 20px;
+}
+.card-header h4,
+.card-header h5 {
+  color: #fff;
+}
+
+/* Table inside card */
+.card .table {
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Form fields */
+form p {
+  margin-bottom: 14px;
+}
+form label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+form .helptext {
+  font-size: 12px;
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
