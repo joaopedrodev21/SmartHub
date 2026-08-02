@@ -46,11 +46,23 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     template_name = 'products/form.html'
     success_url = reverse_lazy('products:product_list')
 
+    def form_valid(self, form):
+        company = self.request.user.companies.first()
+        if company: 
+            form.instance.company = company
+        return super().form_valid(form)
+
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'products/form.html'
     success_url = reverse_lazy('products:product_list')
+
+    def form_valid(self, form):
+        company = self.request.user.companies.first()
+        if company:
+            form.instance.company = company
+        return super().form_valid(form)
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product

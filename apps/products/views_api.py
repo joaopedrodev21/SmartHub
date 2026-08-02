@@ -1,7 +1,8 @@
-from rest_framework import generics, permissions, status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth.models import User
+from apps.customers.models import Company
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -24,6 +25,11 @@ def register(request):
         return Response({'error': 'Usuário já existe'}, status=status.HTTP_400_BAD_REQUEST)
 
     user = User.objects.create_user(username=username, email=email, password=password)
+    company = Company.objects.create(
+        name=f"{username}'s Company",
+        email=user.email,
+        owner=user
+    )
     refresh = RefreshToken.for_user(user)
 
     return Response({
@@ -60,10 +66,8 @@ def login(request):
     })
 
 
-# Products 
-#Rota de listagem e criação de produtos
-class ProductListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
+# Products
+class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -71,25 +75,23 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
         return Product.objects.filter(company__owner=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save()
+        company = self.request.user.companies.first()
+        if not company:
+            company = Company.objects.create(
+                name=f"{self.request.user.username}'s Company",
+                email=self.request.user.email,
+                owner=self.request.user,
+            )
+        serializer.save(company=company)
 
-#Rota de detalhes, atualização e exclusão de produtos
-class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return Product.objects.filter(company__owner=self.request.user)
-
-#Rota de detalhes do estoque de produtos
-class ProductStockDetailAPIView(generics.RetrieveAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return Product.objects.filter(company__owner=self.request.user)
+    @action(detail=True, methods=['get'], url_path='stock')
+    def stock(self, request, pk=None):
+        product = self.get_object()
+        return Response({
+            'id': product.id,
+            'name': product.name,
+            'stock': product.stock,
+        })
 
 # Company Revenue (só dono)
 class CompanyRevenueAPIView(generics.GenericAPIView):
@@ -97,7 +99,7 @@ class CompanyRevenueAPIView(generics.GenericAPIView):
 
     def get(self, request):
         try:
-            company = request.user.company_set.first()
+            company = request.user.companies.first()
             if not company:
                 return Response({'error': 'Nenhuma empresa encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
