@@ -212,6 +212,31 @@ form .helptext {
   margin-top: 2px;
 }
 
+.password-toggle-wrapper {
+  position: relative;
+  width: 100%;
+}
+.password-toggle-wrapper .password-input {
+  padding-right: 44px;
+}
+.password-toggle-wrapper button {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 0 6px;
+  z-index: 2;
+}
+.password-toggle-wrapper button:hover,
+.password-toggle-wrapper button:focus {
+  color: var(--dark);
+  background: transparent;
+  box-shadow: none;
+}
+
 /* Footer */
 footer {
   border-top: 1px solid var(--border);

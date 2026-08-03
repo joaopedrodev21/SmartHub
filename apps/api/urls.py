@@ -13,8 +13,8 @@ router.register(r'products', ProductViewSet, basename='product')
 
 urlpatterns = [
     # Auth
-    path('auth/register/', register, name='register'),
-    path('auth/login/', login, name='login'),
+    path('auth/register/', register, name='api_register'),
+    path('auth/login/', login, name='api_login'),
 
     # Company Revenue
     path('company/revenue/', CompanyRevenueAPIView.as_view(), name='company-revenue'),

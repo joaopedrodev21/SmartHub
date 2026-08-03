@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def sale_list_view(request):
-    sales = Sale.objects.select_related('product').all()
+    sales = Sale.objects.select_related('product').filter(company__owner=request.user)
     return render(request, 'sales/list.html', {'sales': sales})
 
 
@@ -16,10 +16,11 @@ def sale_create_view(request):
         form = SaleForm(request.POST)
         #Salvamento do objeto Sale com o total_price calculado
         if form.is_valid():
-            sale = form.save(commit=False)
-            sale.total_price = sale.product.price * sale.quantity
-            sale.save()
-            return redirect('sales:sale_list')
+           sale = form.save(commit=False)
+           sale.total_price = sale.product.price * sale.quantity
+           sale.company = request.user.companies.first()
+           sale.save()
+        return redirect('sales:sale_list')
     else:
         form = SaleForm()
 

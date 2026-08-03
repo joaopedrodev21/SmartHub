@@ -1,10 +1,9 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView
-from apps.customers.models import Customer 
-from apps.customers import CustomerForm 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from apps.customers.models import Customer
+from .forms import CustomerForm
 
 class CustomerListView(LoginRequiredMixin, ListView):
     model = Customer 
