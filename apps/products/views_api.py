@@ -17,6 +17,7 @@ def register(request):
     username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
+    company_name = request.data.get('company_name') or f"{username}'s Company"
 
     if not username or not email or not password:
         return Response({'error': 'Preencha todos os campos'}, status=status.HTTP_400_BAD_REQUEST)
@@ -26,7 +27,7 @@ def register(request):
 
     user = User.objects.create_user(username=username, email=email, password=password)
     company = Company.objects.create(
-        name=f"{username}'s Company",
+        name=company_name,
         email=user.email,
         owner=user
     )

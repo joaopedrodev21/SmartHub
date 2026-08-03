@@ -26,7 +26,7 @@ class PasswordInput(forms.PasswordInput):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'stock', 'category', 'brand', 'company']
+        fields = ['name', 'description', 'price', 'stock', 'category', 'brand']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
@@ -34,7 +34,6 @@ class ProductForm(forms.ModelForm):
             'stock': forms.NumberInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
             'brand': forms.TextInput(attrs={'class': 'form-control'}),
-            'company': forms.Select(attrs={'class': 'form-control'}),
         }
 
 
@@ -69,6 +68,7 @@ class EmailLoginForm(forms.Form):
 class RegisterForm(forms.Form):
     name = forms.CharField(label='Nome', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(label='E-mail', widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    company_name = forms.CharField(label='Nome da empresa', max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(label='Senha', widget=PasswordInput())
     password_confirm = forms.CharField(label='Confirmar senha', widget=PasswordInput())
 

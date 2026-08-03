@@ -13,15 +13,14 @@ def sale_list_view(request):
 @login_required
 def sale_create_view(request):
     if request.method == 'POST':
-        form = SaleForm(request.POST)
-        #Salvamento do objeto Sale com o total_price calculado
+        form = SaleForm(request.POST, user=request.user)
         if form.is_valid():
-           sale = form.save(commit=False)
-           sale.total_price = sale.product.price * sale.quantity
-           sale.company = request.user.companies.first()
-           sale.save()
+            sale = form.save(commit=False)
+            sale.total_price = sale.product.price * sale.quantity
+            sale.company = request.user.companies.first()
+            sale.save()
         return redirect('sales:sale_list')
     else:
-        form = SaleForm()
+        form = SaleForm(user=request.user)
 
     return render(request, 'sales/form.html', {'form': form})
