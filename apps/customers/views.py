@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from apps.customers.models import Customer
+from django.contrib import messages
+from apps.customers.models import Customer, Company
 from .forms import CustomerForm
 
 class CustomerListView(LoginRequiredMixin, ListView):
@@ -24,9 +25,20 @@ class CustomerCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         company = self.request.user.companies.first()
-        if company:
-            form.instance.company = company
-        return super().form_valid(form)
+        if not company:
+            company = Company.objects.create(
+                name=f"{self.request.user.first_name or self.request.user.username} Company",
+                email=self.request.user.email,
+                owner=self.request.user,
+            )
+        form.instance.company = company
+        response = super().form_valid(form)
+        messages.success(self.request, 'Cliente criado com sucesso!')
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Não foi possível criar o cliente. Verifique os campos.')
+        return super().form_invalid(form)
 
 class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     model = Customer
@@ -42,9 +54,20 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         company = self.request.user.companies.first()
-        if company:
-            form.instance.company = company
-        return super().form_valid(form)
+        if not company:
+            company = Company.objects.create(
+                name=f"{self.request.user.first_name or self.request.user.username} Company",
+                email=self.request.user.email,
+                owner=self.request.user,
+            )
+        form.instance.company = company
+        response = super().form_valid(form)
+        messages.success(self.request, 'Cliente atualizado com sucesso!')
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Não foi possível atualizar o cliente. Verifique os campos.')
+        return super().form_invalid(form)
 
 class CustomerDeleteView(LoginRequiredMixin, DeleteView):
     model = Customer
@@ -56,3 +79,8 @@ class CustomerDeleteView(LoginRequiredMixin, DeleteView):
         if company:
             return Customer.objects.filter(company=company)
         return Customer.objects.none()
+
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        messages.success(self.request, 'Cliente excluído com sucesso!')
+        return response

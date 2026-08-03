@@ -19,6 +19,7 @@
       <thead>
         <tr>
           <th>Produto</th>
+          <th>Cliente</th>
           <th>Quantidade</th>
           <th>Total</th>
           <th>Data</th>
@@ -28,13 +29,14 @@
         {% for sale in sales %}
         <tr>
           <td>{{ sale.product.name }}</td>
+          <td>{{ sale.customer.name|default:'—' }}</td>
           <td>{{ sale.quantity }}</td>
           <td>R$ {{ sale.total_price }}</td>
           <td>{{ sale.sold_at }}</td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="4" class="text-center text-muted py-4">
+          <td colspan="5" class="text-center text-muted py-4">
             <i data-lucide="inbox" class="lucide-empty"></i>
             <div class="mt-2">Nenhuma venda registrada.</div>
           </td>

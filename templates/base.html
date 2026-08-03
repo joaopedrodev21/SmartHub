@@ -30,6 +30,10 @@
                         <i data-lucide="shopping-cart" class="lucide-nav"></i>
                         <span>Vendas</span>
                     </a>
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'customers:customer_list' %}">
+                        <i data-lucide="users" class="lucide-nav"></i>
+                        <span>Clientes</span>
+                    </a>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     {% if user.is_authenticated %}

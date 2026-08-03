@@ -1,14 +1,16 @@
 from django import forms
 from apps.products.models import Product
+from apps.customers.models import Customer
 from .models import Sale
 
 
 class SaleForm(forms.ModelForm):
     class Meta:
         model = Sale
-        fields = ['product', 'quantity']
+        fields = ['product', 'customer', 'quantity']
         widgets = {
             'product': forms.Select(attrs={'class': 'form-control'}),
+            'customer': forms.Select(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
@@ -20,8 +22,10 @@ class SaleForm(forms.ModelForm):
             company = self.user.companies.first()
             if company:
                 self.fields['product'].queryset = Product.objects.filter(company=company)
+                self.fields['customer'].queryset = Customer.objects.filter(company=company)
             else:
                 self.fields['product'].queryset = Product.objects.none()
+                self.fields['customer'].queryset = Customer.objects.none()
 
     def clean(self):
         cleaned_data = super().clean()

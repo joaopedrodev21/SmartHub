@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import Sale
 from .forms import SaleForm
 from django.contrib.auth.decorators import login_required
@@ -6,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def sale_list_view(request):
-    sales = Sale.objects.select_related('product').filter(company__owner=request.user)
+    sales = Sale.objects.select_related('product', 'customer').filter(company__owner=request.user)
     return render(request, 'sales/list.html', {'sales': sales})
 
 
@@ -19,7 +20,9 @@ def sale_create_view(request):
             sale.total_price = sale.product.price * sale.quantity
             sale.company = request.user.companies.first()
             sale.save()
-        return redirect('sales:sale_list')
+            messages.success(request, 'Venda registrada com sucesso!')
+            return redirect('sales:sale_list')
+        messages.error(request, 'Não foi possível registrar a venda. Verifique os dados.')
     else:
         form = SaleForm(user=request.user)
 

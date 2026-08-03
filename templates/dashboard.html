@@ -76,7 +76,8 @@
           <thead>
             <tr>
               <th>Produto</th>
-              <th>Quantidade</th>
+              <th>Cliente</th>
+              <th>Qtd</th>
               <th>Total</th>
               <th>Data</th>
             </tr>
@@ -85,13 +86,14 @@
             {% for sale in recent_sales %}
             <tr>
               <td>{{ sale.product.name }}</td>
+              <td>{{ sale.customer.name|default:'—' }}</td>
               <td>{{ sale.quantity }}</td>
               <td>R$ {{ sale.total_price }}</td>
               <td>{{ sale.sold_at|date:"d/m/Y H:i" }}</td>
             </tr>
             {% empty %}
             <tr>
-              <td colspan="4" class="text-center text-muted py-4">
+              <td colspan="5" class="text-center text-muted py-4">
                 <i data-lucide="inbox" class="lucide-empty"></i>
                 <div class="mt-2">Nenhuma venda realizada.</div>
               </td>

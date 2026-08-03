@@ -1,5 +1,3 @@
-from urllib import request
-
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -25,7 +23,7 @@ def dashboard(request):
     total_stock = Product.objects.filter(company__owner=request.user).aggregate(Sum('stock'))['stock__sum'] or 0
     total_revenue = Company.objects.filter(owner=request.user).aggregate(Sum('revenue'))['revenue__sum'] or 0
     total_sales = Sale.objects.filter(company__owner=request.user).count()
-    recent_sales = Sale.objects.select_related('product').filter(company__owner=request.user).order_by('-sold_at')[:5]
+    recent_sales = Sale.objects.select_related('product', 'customer').filter(company__owner=request.user).order_by('-sold_at')[:5]
 
     context = {
         'total_products': total_products,

@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 from apps.customers.models import Company
-from .models import Product
+from apps.products.models import Product
 
 
 class ProductTenantIsolationTests(TestCase):
