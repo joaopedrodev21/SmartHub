@@ -30,9 +30,23 @@ class SaleForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         product = cleaned_data.get('product')
+        customer = cleaned_data.get('customer')
         quantity = cleaned_data.get('quantity')
 
         if product and quantity and quantity > product.stock:
             self.add_error('quantity', 'Quantidade superior ao estoque disponível.')
+
+        # Necessário um cliente para registrar a venda
+        if customer is None:
+            self.add_error('customer', 'Selecione um cliente para a venda.')
+
+        # Necessário que o produto e o cliente pertençam à mesma empresa que o usuário atual
+        if self.user is not None and product is not None and customer is not None:
+            company = self.user.companies.first()
+            if company:
+                if product.company_id != company.id:
+                    self.add_error('product', 'Produto inválido para a sua empresa.')
+                if customer.company_id != company.id:
+                    self.add_error('customer', 'Cliente inválido para a sua empresa.')
 
         return cleaned_data

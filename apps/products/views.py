@@ -34,6 +34,27 @@ def dashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
+@login_required
+def profile_view(request):
+    user = request.user
+    company = user.companies.first()
+
+    if request.method == 'POST':
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.email = request.POST.get('email', user.email)
+        user.save()
+
+        if company:
+            company.name = request.POST.get('company_name', company.name)
+            company.phone_number = request.POST.get('phone_number', company.phone_number)
+            company.address = request.POST.get('address', company.address)
+            company.save()
+
+        messages.success(request, 'Perfil atualizado com sucesso!')
+        return redirect('profile')
+
+    return render(request, 'profile.html', {'user': user, 'company': company})
+
 def logout_view(request):
     logout(request)
     return redirect('home')

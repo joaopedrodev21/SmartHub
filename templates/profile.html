@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Meu Perfil - SmartHub CRM{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex align-items-center gap-2">
+          <i data-lucide="user-cog" class="lucide-card-header"></i>
+          <h4 class="mb-0">Meu Perfil</h4>
+        </div>
+      </div>
+      <div class="card-body p-4">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nome</label>
+              <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">E-mail</label>
+              <input type="email" name="email" class="form-control" value="{{ user.email }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Nome da Empresa</label>
+              <input type="text" name="company_name" class="form-control" value="{{ company.name|default_if_none:'' }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Telefone</label>
+              <input type="text" name="phone_number" class="form-control" value="{{ company.phone_number|default_if_none:'' }}">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Endereço</label>
+              <textarea name="address" class="form-control" rows="3">{{ company.address|default_if_none:'' }}</textarea>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Salvar alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
