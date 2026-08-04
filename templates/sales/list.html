@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
-{% block title %}Vendas{% endblock %}
+{% block title %}Vendas - SmartHub CRM{% endblock %}
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="page-header">
   <div class="d-flex align-items-center gap-2">
     <i data-lucide="shopping-cart" class="lucide-title"></i>
     <h1 class="mb-0">Vendas</h1>
   </div>
-  <a href="{% url 'sales:sale_create' %}" class="btn btn-success d-flex align-items-center gap-2">
+  <a href="{% url 'sales:sale_create' %}" class="btn btn-success d-inline-flex align-items-center justify-content-center gap-2">
     <i data-lucide="plus" class="lucide-btn-sm"></i>
-    Nova Venda
+    <span>Nova Venda</span>
   </a>
 </div>
 
 <div class="card">
-  <div class="card-body">
-    <table class="table table-striped mb-0">
+  <div class="card-body p-0 p-md-3">
+    <table class="table table-striped mb-0 table-responsive-stack">
       <thead>
         <tr>
           <th>Produto</th>
@@ -28,11 +28,11 @@
       <tbody>
         {% for sale in sales %}
         <tr>
-          <td>{{ sale.product.name }}</td>
-          <td>{{ sale.customer.name|default:'—' }}</td>
-          <td>{{ sale.quantity }}</td>
-          <td>R$ {{ sale.total_price }}</td>
-          <td>{{ sale.sold_at }}</td>
+          <td data-label="Produto">{{ sale.product.name }}</td>
+          <td data-label="Cliente">{{ sale.customer.name|default:'—' }}</td>
+          <td data-label="Quantidade">{{ sale.quantity }}</td>
+          <td data-label="Total">R$ {{ sale.total_price }}</td>
+          <td data-label="Data">{{ sale.sold_at }}</td>
         </tr>
         {% empty %}
         <tr>

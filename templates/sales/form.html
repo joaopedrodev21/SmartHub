@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Nova Venda{% endblock %}
+{% block title %}Nova Venda - SmartHub CRM{% endblock %}
 {% block content %}
 
 <div class="row justify-content-center">
-  <div class="col-md-4">
+  <div class="col-md-8 col-lg-5">
     <div class="card">
       <div class="card-header d-flex align-items-center gap-2">
         <i data-lucide="shopping-cart" class="lucide-card-header"></i>
@@ -13,14 +13,14 @@
         <form method="post">
           {% csrf_token %}
           {{ form.as_p }}
-          <div class="d-flex gap-2 mt-3">
-            <button type="submit" class="btn btn-success flex-fill d-flex align-items-center justify-content-center gap-2">
+          <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
+            <button type="submit" class="btn btn-success flex-fill d-inline-flex align-items-center justify-content-center gap-2">
                 <i data-lucide="check" class="lucide-btn-sm"></i>
-                Vender
+                <span>Vender</span>
             </button>
-            <a href="{% url 'sales:sale_list' %}" class="btn btn-secondary flex-fill d-flex align-items-center justify-content-center gap-2">
+            <a href="{% url 'sales:sale_list' %}" class="btn btn-secondary flex-fill d-inline-flex align-items-center justify-content-center gap-2">
                 <i data-lucide="x" class="lucide-btn-sm"></i>
-                Cancelar
+                <span>Cancelar</span>
             </a>
           </div>
         </form>

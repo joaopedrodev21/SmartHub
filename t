@@ -1,21 +1,14 @@
 {% extends 'base.html' %}
-{% block title %}Login - SmartHub CRM{% endblock %}
+{% block title %}Cadastro - SmartHub CRM{% endblock %}
 {% block content %}
-
-<style>
-  /* Hide main navigation links and toggler on the login page */
-  .navbar .navbar-nav,
-  .navbar .navbar-toggler { display: none !important; }
-</style>
-
 <div class="row justify-content-center">
-  <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-5">
     <div class="card">
       <div class="card-header text-center">
         <div class="d-flex justify-content-center mb-2">
-            <i data-lucide="lock" class="lucide-card"></i>
+            <i data-lucide="user-plus" class="lucide-card"></i>
         </div>
-        <h4 class="mb-0">Login</h4>
+        <h4 class="mb-0">Criar conta</h4>
       </div>
       <div class="card-body p-4">
         <form method="post">
@@ -33,18 +26,17 @@
             <div class="text-danger small mb-3">{{ form.non_field_errors|striptags }}</div>
           {% endif %}
           <button type="submit" class="btn btn-primary w-100 d-inline-flex align-items-center justify-content-center gap-2">
-            <i data-lucide="log-in" class="lucide-btn-sm"></i>
-            <span>Entrar</span>
+            <i data-lucide="user-plus" class="lucide-btn-sm"></i>
+            <span>Cadastrar</span>
           </button>
         </form>
         <div class="text-center mt-3">
-          <a href="{% url 'register' %}">Não tem conta? Crie uma agora</a>
+          <a href="{% url 'login' %}">Já tem conta? Faça login</a>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}

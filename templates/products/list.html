@@ -2,20 +2,20 @@
 {% block title %}Produtos - SmartHub CRM{% endblock %}
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="page-header">
   <div class="d-flex align-items-center gap-2">
     <i data-lucide="package" class="lucide-title"></i>
     <h1 class="mb-0">Produtos</h1>
   </div>
-  <a href="{% url 'products:product_create' %}" class="btn btn-primary d-flex align-items-center gap-2">
+  <a href="{% url 'products:product_create' %}" class="btn btn-primary d-inline-flex align-items-center justify-content-center gap-2">
     <i data-lucide="plus" class="lucide-btn-sm"></i>
-    Novo Produto
+    <span>Novo Produto</span>
   </a>
 </div>
 
 <div class="card">
-  <div class="card-body">
-    <table class="table table-striped mb-0">
+  <div class="card-body p-0 p-md-3">
+    <table class="table table-striped mb-0 table-responsive-stack">
       <thead>
         <tr>
           <th>Nome</th>
@@ -29,20 +29,20 @@
       <tbody>
         {% for product in products %}
         <tr>
-          <td>{{ product.name }}</td>
-          <td>{{ product.get_category_display }}</td>
-          <td>{{ product.brand }}</td>
-          <td>R$ {{ product.price }}</td>
-          <td>{{ product.stock }}</td>
-          <td class="text-end">
+          <td data-label="Nome">{{ product.name }}</td>
+          <td data-label="Categoria">{{ product.get_category_display }}</td>
+          <td data-label="Marca">{{ product.brand }}</td>
+          <td data-label="Preço">R$ {{ product.price }}</td>
+          <td data-label="Estoque">{{ product.stock }}</td>
+          <td data-label="Ações" class="text-end">
             <div class="d-flex gap-1 justify-content-end">
-              <a href="{% url 'products:product_update' product.pk %}" class="btn btn-sm btn-warning d-flex align-items-center gap-1">
+              <a href="{% url 'products:product_update' product.pk %}" class="btn btn-sm btn-warning d-inline-flex align-items-center gap-1">
                 <i data-lucide="pencil" class="lucide-btn-sm"></i>
-                Editar
+                <span>Editar</span>
               </a>
-              <a href="{% url 'products:product_delete' product.pk %}" class="btn btn-sm btn-danger d-flex align-items-center gap-1">
+              <a href="{% url 'products:product_delete' product.pk %}" class="btn btn-sm btn-danger d-inline-flex align-items-center gap-1">
                 <i data-lucide="trash-2" class="lucide-btn-sm"></i>
-                Excluir
+                <span>Excluir</span>
               </a>
             </div>
           </td>

@@ -84,3 +84,24 @@ class CustomerDeleteView(LoginRequiredMixin, DeleteView):
         response = super().delete(request, *args, **kwargs)
         messages.success(self.request, 'Cliente excluído com sucesso!')
         return response
+
+
+class CustomerDetailView(LoginRequiredMixin, UpdateView):
+    model = Customer
+    form_class = CustomerForm
+    template_name = 'customers/detail.html'
+    success_url = reverse_lazy('customers:customer_list')
+
+    def get_queryset(self):
+        company = self.request.user.companies.first()
+        if company:
+            return Customer.objects.filter(company=company)
+        return Customer.objects.none()
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Cliente atualizado com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Não foi possível atualizar o cliente. Verifique os campos.')
+        return super().form_invalid(form)

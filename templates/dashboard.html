@@ -2,13 +2,15 @@
 {% block title %}Dashboard - SmartHub CRM{% endblock %}
 {% block content %}
 
-<div class="d-flex align-items-center gap-2 mb-4">
+<div class="page-header">
+  <div class="d-flex align-items-center gap-2">
     <i data-lucide="layout-dashboard" class="lucide-title"></i>
     <h1 class="mb-0">Dashboard</h1>
+  </div>
 </div>
 
-<div class="row g-4 mb-5">
-  <div class="col-md-6 col-lg-3">
+<div class="row g-3 g-md-4 mb-4 dashboard-stats">
+  <div class="col-12 col-sm-6 col-lg-3">
     <div class="card text-center h-100 border-primary">
       <div class="card-body">
         <div class="d-flex justify-content-center mb-2">
@@ -16,11 +18,11 @@
         </div>
         <h5 class="card-title text-primary">Produtos</h5>
         <p class="display-6 fw-bold mb-1">{{ total_products }}</p>
-        <p class="text-muted mb-0">Total de produtos cadastrados</p>
+        <p class="text-muted mb-0 small">Total de produtos cadastrados</p>
       </div>
     </div>
   </div>
-  <div class="col-md-6 col-lg-3">
+  <div class="col-12 col-sm-6 col-lg-3">
     <div class="card text-center h-100 border-success">
       <div class="card-body">
         <div class="d-flex justify-content-center mb-2">
@@ -28,11 +30,11 @@
         </div>
         <h5 class="card-title text-success">Estoque</h5>
         <p class="display-6 fw-bold mb-1">{{ total_stock }}</p>
-        <p class="text-muted mb-0">Unidades em estoque</p>
+        <p class="text-muted mb-0 small">Unidades em estoque</p>
       </div>
     </div>
   </div>
-  <div class="col-md-6 col-lg-3">
+  <div class="col-12 col-sm-6 col-lg-3">
     <div class="card text-center h-100 border-warning">
       <div class="card-body">
         <div class="d-flex justify-content-center mb-2">
@@ -40,11 +42,11 @@
         </div>
         <h5 class="card-title text-warning">Faturamento</h5>
         <p class="display-6 fw-bold mb-1">R$ {{ total_revenue|floatformat:2 }}</p>
-        <p class="text-muted mb-0">Faturamento total</p>
+        <p class="text-muted mb-0 small">Faturamento total</p>
       </div>
     </div>
   </div>
-  <div class="col-md-6 col-lg-3">
+  <div class="col-12 col-sm-6 col-lg-3">
     <div class="card text-center h-100 border-info">
       <div class="card-body">
         <div class="d-flex justify-content-center mb-2">
@@ -52,7 +54,7 @@
         </div>
         <h5 class="card-title text-info">Vendas</h5>
         <p class="display-6 fw-bold mb-1">{{ total_sales }}</p>
-        <p class="text-muted mb-0">Total de vendas realizadas</p>
+        <p class="text-muted mb-0 small">Total de vendas realizadas</p>
       </div>
     </div>
   </div>
@@ -61,18 +63,18 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-center">
+      <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <h5 class="mb-0 d-flex align-items-center gap-2">
             <i data-lucide="history" class="lucide-card-header"></i>
             Últimas Vendas
         </h5>
-        <a href="{% url 'sales:sale_list' %}" class="btn btn-sm btn-primary d-flex align-items-center gap-1">
+        <a href="{% url 'sales:sale_list' %}" class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1">
             <i data-lucide="list" class="lucide-btn-sm"></i>
-            Ver Todas
+            <span>Ver Todas</span>
         </a>
       </div>
-      <div class="card-body">
-        <table class="table table-sm mb-0">
+      <div class="card-body p-0 p-md-3">
+        <table class="table table-sm mb-0 table-responsive-stack">
           <thead>
             <tr>
               <th>Produto</th>
@@ -85,11 +87,11 @@
           <tbody>
             {% for sale in recent_sales %}
             <tr>
-              <td>{{ sale.product.name }}</td>
-              <td>{{ sale.customer.name|default:'—' }}</td>
-              <td>{{ sale.quantity }}</td>
-              <td>R$ {{ sale.total_price }}</td>
-              <td>{{ sale.sold_at|date:"d/m/Y H:i" }}</td>
+              <td data-label="Produto">{{ sale.product.name }}</td>
+              <td data-label="Cliente">{{ sale.customer.name|default:'—' }}</td>
+              <td data-label="Quantidade">{{ sale.quantity }}</td>
+              <td data-label="Total">R$ {{ sale.total_price }}</td>
+              <td data-label="Data">{{ sale.sold_at|date:"d/m/Y H:i" }}</td>
             </tr>
             {% empty %}
             <tr>

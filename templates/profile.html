@@ -2,13 +2,20 @@
 {% block title %}Meu Perfil - SmartHub CRM{% endblock %}
 
 {% block content %}
+<div class="page-header">
+  <div class="d-flex align-items-center gap-2">
+    <i data-lucide="user-cog" class="lucide-title"></i>
+    <h1 class="mb-0">Meu Perfil</h1>
+  </div>
+</div>
+
 <div class="row justify-content-center">
-  <div class="col-lg-8">
+  <div class="col-12 col-lg-8">
     <div class="card">
       <div class="card-header">
         <div class="d-flex align-items-center gap-2">
           <i data-lucide="user-cog" class="lucide-card-header"></i>
-          <h4 class="mb-0">Meu Perfil</h4>
+          <h4 class="mb-0">Dados Pessoais e Empresa</h4>
         </div>
       </div>
       <div class="card-body p-4">
@@ -38,7 +45,10 @@
           </div>
 
           <div class="mt-4">
-            <button type="submit" class="btn btn-primary">Salvar alterações</button>
+            <button type="submit" class="btn btn-primary d-inline-flex align-items-center justify-content-center gap-2">
+              <i data-lucide="save" class="lucide-btn-sm"></i>
+              <span>Salvar alterações</span>
+            </button>
           </div>
         </form>
       </div>

@@ -8,6 +8,11 @@ class SaleForm(forms.ModelForm):
     class Meta:
         model = Sale
         fields = ['product', 'customer', 'quantity']
+        labels = {
+            'product': 'Produto',
+            'customer': 'Cliente',
+            'quantity': 'Quantidade',
+        }
         widgets = {
             'product': forms.Select(attrs={'class': 'form-control'}),
             'customer': forms.Select(attrs={'class': 'form-control'}),
