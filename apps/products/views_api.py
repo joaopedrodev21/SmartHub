@@ -67,7 +67,7 @@ def login(request):
     })
 
 
-# Products
+# Classe para gerenciar produtos
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
