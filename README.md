@@ -47,6 +47,7 @@ O SmartHub CRM é um sistema de gestão empresarial que permite cadastrar e gere
 - djangorestframework-simplejwt (autenticação JWT)
 - SQLite (desenvolvimento) / PostgreSQL (produção)
 - Bootstrap 5 e Lucide (interface)
+- Docker e Docker Compose (containerização)
 
 ---
 
@@ -62,13 +63,17 @@ SmartHub-Django/
 │   └── customers/           # Clientes e empresas
 ├── templates/               # HTMLs do projeto
 ├── static/                  # CSS e JS
+├── Dockerfile               # Definição da imagem do container
+├── docker-compose.yml       # Orquestração dos serviços
+├── .dockerignore            # Arquivos ignorados na imagem
+├── .env                     # Variáveis de ambiente (não versionado)
 ├── manage.py
 └── requirements.txt
 ```
 
 ---
 
-## Como Rodar o Projeto
+## Como Rodar o Projeto (sem Docker)
 
 ```bash
 # 1. Clone o repositório
@@ -83,17 +88,122 @@ venv\Scripts\activate  # Windows
 # 3. Instale as dependências
 pip install -r requirements.txt
 
-# 4. Execute as migrações
+# 4. Configure o arquivo .env (se ainda não existir)
+#    Crie um arquivo .env na raiz com as variáveis de email (ver seção Docker)
+
+# 5. Execute as migrações
 python manage.py migrate
 
-# 5. Crie um superusuário (opcional, para o admin)
+# 6. Crie um superusuário (opcional, para o admin)
 python manage.py createsuperuser
 
-# 6. Inicie o servidor
+# 7. Inicie o servidor
 python manage.py runserver
 ```
 
 Acesse `http://127.0.0.1:8000/` no navegador.
+
+---
+
+## Como Rodar o Projeto (com Docker)
+
+Certifique-se de ter o **Docker Desktop** instalado e em execução.
+
+### 1. Configure o arquivo `.env`
+
+Crie ou edite o arquivo `.env` na raiz do projeto com as variáveis de ambiente necessárias:
+
+```env
+# Email (SMTP do Gmail)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_HOST_USER=seuemail@gmail.com
+EMAIL_HOST_PASSWORD="sua senha de app do gmail"
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+DEFAULT_FROM_EMAIL="SmartHub CRM <seuemail@gmail.com>"
+```
+
+**Atenção**: valores com espaços (como a senha de app do Gmail) devem ficar entre aspas duplas.
+
+### 2. Construa e suba o container
+
+```bash
+docker-compose up --build
+```
+
+Isso vai:
+- Construir a imagem a partir do `Dockerfile`
+- Injetar as variáveis do `.env` via `env_file`
+- Rodar as migrações automaticamente
+- Iniciar o Django em `0.0.0.0:8000`
+
+### 3. Acesse a aplicação
+
+Abra o navegador em **http://localhost:8000/** (não use `0.0.0.0` no navegador).
+
+### 4. Crie um superusuário (opcional)
+
+Em outro terminal:
+
+```bash
+docker-compose exec web python manage.py createsuperuser
+```
+
+---
+
+## Comandos Docker úteis
+
+| Comando | Descrição |
+|---------|-----------|
+| `docker-compose up` | Sobe a aplicação (em primeiro plano) |
+| `docker-compose up --build` | Constrói a imagem e sobe a aplicação |
+| `docker-compose up -d` | Sobe em segundo plano (background) |
+| `docker-compose logs -f` | Acompanha os logs em tempo real |
+| `docker-compose exec web bash` | Abre um terminal dentro do container |
+| `docker-compose exec web python manage.py migrate` | Roda migrações manualmente |
+| `docker-compose down` | Para e remove os containers |
+| `docker-compose down -v` | Para e remove containers + volume do banco |
+
+---
+
+## Como Testar o Projeto
+
+### Testes automatizados
+
+Rode os testes do app de produtos (a execução conjunta de múltiplos apps pode gerar conflito de módulo `tests` no Python 3.14, por isso recomenda-se rodar um por vez):
+
+```bash
+python manage.py test apps.products -v 1
+```
+
+**Com Docker:**
+```bash
+docker-compose exec web python manage.py test apps.products -v 1
+```
+
+### Testar o envio de email (SMTP do Gmail)
+
+```bash
+python manage.py shell -c "from django.core.mail import send_mail; from django.conf import settings; send_mail('Teste', 'Corpo do email', settings.DEFAULT_FROM_EMAIL, ['destinatario@email.com'], fail_silently=False)"
+```
+
+### Testar o fluxo de redefinição de senha
+
+1. Acesse `/accounts/password-reset/`
+2. Informe o email de um usuário cadastrado
+3. Verifique a chegada do email na caixa de entrada/spam
+4. Clique no link e defina uma nova senha
+
+> **Observação**: o Django só envia o email de redefinição se o email informado **pertencer a um usuário cadastrado** no sistema.
+
+### Testar o fluxo completo do CRM
+
+1. Cadastre-se em `/accounts/register/` (cria usuário + empresa automaticamente)
+2. Faça login
+3. Cadastre um cliente
+4. Cadastre um produto
+5. Registre uma venda (estoque e faturamento são atualizados automaticamente)
+6. Verifique o dashboard
 
 ---
 
