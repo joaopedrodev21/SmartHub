@@ -1,0 +1,20 @@
+# Criação dos serviços do docker-compose
+
+services:
+  web:
+    build: .
+    container_name: smarthub-django
+    command: 
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - DEBUG=True
+
+# Comandos para rodar após ficar pronto:
+# docker-compose up --build

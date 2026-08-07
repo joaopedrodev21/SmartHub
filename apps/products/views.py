@@ -103,7 +103,7 @@ def register_view(request):
         )
 
         messages.success(request, 'Cadastro realizado com sucesso! Faça login para continuar.')
-        return redirect('login')
+        return redirect('dashboard')
 
     return render(request, 'registration/register.html', {'form': form})
 

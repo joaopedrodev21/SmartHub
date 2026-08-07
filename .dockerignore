@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.python-version
+venv/
+.env.venv/
+
+# Ambiente virtual
+venv/
+.venv/
+
+# Banco de dados local (usamos volume no compose)
+db.sqlite3
+db.sqlite3-journal
+
+# Arquivos de ambiente - ATENÇÃO: se você montar o .env via env_file,
+# NÃO inclua .env aqui para que ele seja copiado/carregado.
+# Se preferir não enviar o .env para dentro da imagem, remova esta linha.
+
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

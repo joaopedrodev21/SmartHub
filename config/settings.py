@@ -17,20 +17,38 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
+
+def _clean_env_value(value):
+    """Remove aspas simples/duplas dos valores lidos do .env.
+
+    O Docker Compose exige aspas em valores com espaços ou caracteres
+    especiais (ex.: senha de app do Gmail, DEFAULT_FROM_EMAIL). O
+    python-dotenv mantém essas aspas no valor, então removemos aqui.
+    """
+    if value is None:
+        return value
+    if not isinstance(value, str):
+        return value
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
+        return value[1:-1]
+    return value
+
+
 # Email config (read AFTER load_dotenv)
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'smtp')
+EMAIL_BACKEND = _clean_env_value(os.getenv('EMAIL_BACKEND', 'smtp'))
 if EMAIL_BACKEND == 'console':
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = os.getenv('EMAIL_HOST', 'localhost')
-    EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-    EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-    EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False') == 'True'
-    EMAIL_TIMEOUT = int(os.getenv('EMAIL_TIMEOUT', 10))
-    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'SmartHub CRM <no-reply@yourdomain.com>')
+    EMAIL_HOST = _clean_env_value(os.getenv('EMAIL_HOST', 'localhost'))
+    EMAIL_PORT = int(_clean_env_value(os.getenv('EMAIL_PORT', 587)))
+    EMAIL_HOST_USER = _clean_env_value(os.getenv('EMAIL_HOST_USER', ''))
+    EMAIL_HOST_PASSWORD = _clean_env_value(os.getenv('EMAIL_HOST_PASSWORD', ''))
+    EMAIL_USE_TLS = _clean_env_value(os.getenv('EMAIL_USE_TLS', 'True')) == 'True'
+    EMAIL_USE_SSL = _clean_env_value(os.getenv('EMAIL_USE_SSL', 'False')) == 'True'
+    EMAIL_TIMEOUT = int(_clean_env_value(os.getenv('EMAIL_TIMEOUT', 10)))
+    DEFAULT_FROM_EMAIL = _clean_env_value(os.getenv('DEFAULT_FROM_EMAIL', 'SmartHub CRM <no-reply@yourdomain.com>'))
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -131,7 +149,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
