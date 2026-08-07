@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Clientes - SmartHub CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="d-flex align-items-center gap-2">
+        <i data-lucide="users" class="lucide-title"></i>
+        <h1 class="mb-0">Clientes</h1>
+    </div>
+    <a href="{% url 'customers:customer_create' %}" class="btn btn-primary d-inline-flex align-items-center justify-content-center gap-2">
+        <i data-lucide="plus" class="lucide-btn-sm"></i>
+        <span>Novo Cliente</span>
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0 p-md-3">
+        {% if customers %}
+            <table class="table table-hover align-middle mb-0 table-responsive-stack">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Endereço</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                        <tr>
+                            <td data-label="Nome">{{ customer.name }}</td>
+                            <td data-label="Email">{{ customer.email }}</td>
+                            <td data-label="Telefone">{{ customer.phone_number|default:'-' }}</td>
+                            <td data-label="Endereço">{{ customer.address|default:'-' }}</td>
+                            <td data-label="Ações" class="text-end">
+                                <div class="d-flex gap-1 justify-content-end">
+                                    <a href="{% url 'customers:customer_update' customer.pk %}" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1">
+                                        <i data-lucide="pencil" class="lucide-btn-sm"></i>
+                                        <span>Editar</span>
+                                    </a>
+                                    <a href="{% url 'customers:customer_delete' customer.pk %}" class="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1">
+                                        <i data-lucide="trash-2" class="lucide-btn-sm"></i>
+                                        <span>Excluir</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="text-center py-5">
+                <i data-lucide="users" class="lucide-empty"></i>
+                <p class="text-muted mb-3 mt-2">Nenhum cliente cadastrado ainda.</p>
+                <a href="{% url 'customers:customer_create' %}" class="btn btn-primary d-inline-flex align-items-center justify-content-center gap-2">
+                    <i data-lucide="plus" class="lucide-btn-sm"></i>
+                    <span>Cadastrar Cliente</span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}{% if form.instance.pk %}Editar{% else %}Novo{% endif %} Produto - SmartHub CRM{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i data-lucide="{% if form.instance.pk %}pencil{% else %}plus{% endif %}" class="lucide-card-header"></i>
+        <h4 class="mb-0">{% if form.instance.pk %}Editar{% else %}Novo{% endif %} Produto</h4>
+      </div>
+      <div class="card-body p-4">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
+            <button type="submit" class="btn btn-primary flex-fill d-inline-flex align-items-center justify-content-center gap-2">
+                <i data-lucide="{% if form.instance.pk %}save{% else %}check{% endif %}" class="lucide-btn-sm"></i>
+                <span>{% if form.instance.pk %}Atualizar{% else %}Criar{% endif %}</span>
+            </button>
+            <a href="{% url 'products:product_list' %}" class="btn btn-secondary flex-fill d-inline-flex align-items-center justify-content-center gap-2">
+                <i data-lucide="x" class="lucide-btn-sm"></i>
+                <span>Cancelar</span>
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

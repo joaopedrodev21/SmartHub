@@ -1,0 +1,538 @@
+/* ============================================================
+   SmartHub CRM - Stylesheet
+   Estrutura: Variaveis, Base, Navbar, Cards, Tabelas, Forms,
+   Botoes, Hero, Paginas, Responsividade
+   ============================================================ */
+
+/* ---------- Variaveis ---------- */
+:root {
+  --primary: #0d6efd;
+  --success: #198754;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --info: #0dcaf0;
+  --dark: #212529;
+  --light: #f8f9fa;
+  --muted: #6c757d;
+  --bg: #ffffff;
+  --surface: #f1f3f5;
+  --border: #dee2e6;
+  --navbar-bg-start: #0f172a;
+  --navbar-bg-end: #1e293b;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 10px 25px rgba(0,0,0,0.08);
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+
+html, body {
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  background: var(--surface);
+  color: var(--dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  background: linear-gradient(135deg, var(--navbar-bg-start), var(--navbar-bg-end));
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-size: 1.15rem;
+}
+
+.navbar-toggler {
+  border: none;
+  padding: 6px 10px;
+  color: #fff;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.15);
+}
+
+.lucide-toggler {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+
+.nav-link {
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  transition: background 0.2s;
+  color: rgba(255,255,255,0.85);
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+/* Usuario no navbar */
+.navbar-user {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  width: 100%;
+}
+
+.nav-user-link {
+  font-weight: 500;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.nav-user-link:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* Menor que "lg": itens ocupam largura total no menu colapsado */
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-link {
+    padding: 12px 14px;
+    font-size: 1rem;
+  }
+
+  .navbar-user {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .user-name {
+    font-size: 1rem;
+  }
+}
+
+/* lg ou maior: layout horizontal normal */
+@media (min-width: 992px) {
+  .navbar-user {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    width: auto;
+  }
+}
+
+/* ---------- Main / Layout ---------- */
+main.container {
+  flex: 1 0 auto;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: var(--bg);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+.card-header {
+  background: linear-gradient(135deg, var(--navbar-bg-start), var(--navbar-bg-end));
+  color: #fff;
+  border-radius: var(--radius) var(--radius) 0 0 !important;
+  padding: 16px 20px;
+}
+
+.card-header h4,
+.card-header h5 {
+  color: #fff;
+  margin-bottom: 0;
+}
+
+/* ---------- Tabelas ---------- */
+.table {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--bg);
+  margin-bottom: 0;
+}
+
+.table thead {
+  background: linear-gradient(135deg, var(--navbar-bg-start), var(--navbar-bg-end));
+  color: #fff;
+}
+
+.table thead th {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border: none;
+  white-space: nowrap;
+}
+
+.table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.card .table {
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Tabelas em telas pequenas viram cards (stacked) */
+@media (max-width: 767.98px) {
+  .table-responsive-stack {
+    display: block;
+  }
+
+  .table-responsive-stack thead {
+    display: none;
+  }
+
+  .table-responsive-stack tbody,
+  .table-responsive-stack tr,
+  .table-responsive-stack td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-responsive-stack tr {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    padding: 4px 8px;
+    background: var(--bg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .table-responsive-stack tr:hover {
+    background: var(--bg);
+  }
+
+  .table-responsive-stack td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 8px;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: right;
+  }
+
+  .table-responsive-stack td:last-child {
+    border-bottom: none;
+  }
+
+  .table-responsive-stack td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--muted);
+    text-align: left;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .table-responsive-stack td.text-end,
+  .table-responsive-stack td[data-label="Ações"] {
+    justify-content: flex-end;
+  }
+
+  /* Acoes: botoes ocupam espaco adequado */
+  .table-responsive-stack .d-flex.gap-1 {
+    justify-content: flex-end;
+  }
+}
+
+/* Fallback: scroll horizontal para tabelas sem data-label em telas pequenas */
+@media (max-width: 767.98px) {
+  .table:not(.table-responsive-stack) {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ---------- Forms ---------- */
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+}
+
+form p {
+  margin-bottom: 14px;
+}
+
+form label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+
+form .helptext {
+  font-size: 12px;
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.password-toggle-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-toggle-wrapper .password-input {
+  padding-right: 44px;
+}
+
+.password-toggle-wrapper button {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 0 6px;
+  z-index: 2;
+}
+
+.password-toggle-wrapper button:hover,
+.password-toggle-wrapper button:focus {
+  color: var(--dark);
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ---------- Botoes ---------- */
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border: none;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.btn-primary { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+.btn-success { background: linear-gradient(135deg, #16a34a, #15803d); }
+.btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.btn-danger  { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+.btn-secondary { background: linear-gradient(135deg, #6b7280, #374151); }
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+/* ---------- Hero / Home ---------- */
+.hero {
+  background: linear-gradient(135deg, var(--navbar-bg-start), var(--navbar-bg-end));
+  color: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Badge helper ---------- */
+.badge-category {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Icones Lucide ---------- */
+.lucide-nav-brand { width: 24px; height: 24px; color: #fff; }
+.lucide-nav { width: 18px; height: 18px; color: rgba(255,255,255,0.85); flex-shrink: 0; }
+.lucide-btn-sm { width: 16px; height: 16px; flex-shrink: 0; }
+.lucide-title { width: 28px; height: 28px; color: var(--dark); flex-shrink: 0; }
+.lucide-card { width: 32px; height: 32px; }
+.lucide-card-header { width: 20px; height: 20px; }
+.lucide-hero { width: 48px; height: 48px; color: #fff; }
+.lucide-empty { width: 40px; height: 40px; opacity: 0.5; }
+.lucide-warning { width: 22px; height: 22px; color: var(--warning); flex-shrink: 0; margin-top: 2px; }
+
+/* ---------- Cabecalhos de pagina ---------- */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.page-header h1 {
+  font-size: 1.6rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+  padding-top: 1rem;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+/* ---------- Telas pequenas (celulares) ---------- */
+@media (max-width: 575.98px) {
+  main.container {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 1rem;
+  }
+
+  /* Page headers empilham */
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-header .d-flex.align-items-center.gap-2 {
+    justify-content: flex-start;
+  }
+
+  .page-header h1 {
+    font-size: 1.35rem;
+  }
+
+  .page-header .btn {
+    width: 100%;
+  }
+
+  /* Cards com menos padding */
+  .card-body {
+    padding: 14px;
+  }
+
+  .card-header {
+    padding: 14px 16px;
+  }
+
+  /* Botoes com area de toque maior */
+  .btn {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+
+  .btn-sm {
+    padding: 8px 12px;
+  }
+
+  /* Forms em largura total */
+  .form-control,
+  .form-select {
+    padding: 12px 14px;
+    font-size: 16px; /* evita zoom automatico no iOS */
+  }
+
+  /* Dashboard: cards empilhados com espacamento */
+  .dashboard-stats .col-md-6,
+  .dashboard-stats .col-lg-3 {
+    margin-bottom: 10px;
+  }
+
+  .card .display-6 {
+    font-size: 2rem;
+  }
+
+  /* Acoes em tabelas empilhadas */
+  .table-responsive-stack .btn-sm {
+    width: 48%;
+    justify-content: center;
+  }
+
+  .table-responsive-stack td[data-label="Ações"] .d-flex {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+}
+
+/* Formularios de login/cadastro ocupam mais largura no mobile */
+@media (max-width: 575.98px) {
+  .col-md-4,
+  .col-md-5,
+  .col-md-6,
+  .col-lg-8 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ---------- Telas intermediarias (tablets) ---------- */
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .dashboard-stats .col-md-6 {
+    margin-bottom: 12px;
+  }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 992px) {
+  /* Espacamento do menu no desktop */
+  .navbar-nav {
+    gap: 2px;
+  }
+}
+
+/* ---------- Acessibilidade ---------- */
+@media (max-width: 767.98px) {
+  a:focus,
+  button:focus,
+  input:focus {
+    outline: 3px solid rgba(13,110,253,0.18);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------- Utilitarios extras ---------- */
+.dashboard-stats .card {
+  height: 100%;
+  margin-bottom: 0;
+}
+
+.dashboard-stats .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

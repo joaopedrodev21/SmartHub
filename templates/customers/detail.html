@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Cliente - {{ object.name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm mb-3">
+      <div class="card-body d-flex flex-column flex-md-row gap-3">
+        <div class="flex-grow-1">
+          <h3 class="fw-bold mb-1">{{ object.name }}</h3>
+          <p class="text-muted mb-1">{{ object.email }}</p>
+          <p class="mb-0">{{ object.phone_number|default:'-' }}</p>
+          <p class="text-muted small mt-2">{{ object.address|default:'Sem endereço informado' }}</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-outline-secondary d-inline-flex align-items-center gap-2" href="{% url 'customers:customer_update' object.pk %}">
+            <i data-lucide="edit-2" class="lucide-btn-sm"></i>
+            <span>Editar</span>
+          </a>
+          <a class="btn btn-outline-danger d-inline-flex align-items-center gap-2" href="{% url 'customers:customer_delete' object.pk %}">
+            <i data-lucide="trash-2" class="lucide-btn-sm"></i>
+            <span>Excluir</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">Editar Cliente</h4>
+          <button class="btn btn-sm btn-outline-primary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#editCustomerForm" aria-expanded="false" aria-controls="editCustomerForm">
+            Mostrar / Ocultar
+          </button>
+        </div>
+
+        <div class="collapse d-md-block" id="editCustomerForm">
+          <form method="post">
+            {% csrf_token %}
+
+            <div class="row">
+              <div class="col-12">
+                {% for field in form %}
+                  <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                      <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 mt-3">
+              <a href="{% url 'customers:customer_list' %}" class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center gap-2">
+                <i data-lucide="arrow-left" class="lucide-btn-sm"></i>
+                <span>Voltar</span>
+              </a>
+              <button type="submit" class="btn btn-primary d-inline-flex align-items-center justify-content-center gap-2">
+                <i data-lucide="save" class="lucide-btn-sm"></i>
+                <span>Salvar alterações</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

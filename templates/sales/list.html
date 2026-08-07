@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Vendas - SmartHub CRM{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div class="d-flex align-items-center gap-2">
+    <i data-lucide="shopping-cart" class="lucide-title"></i>
+    <h1 class="mb-0">Vendas</h1>
+  </div>
+  <a href="{% url 'sales:sale_create' %}" class="btn btn-success d-inline-flex align-items-center justify-content-center gap-2">
+    <i data-lucide="plus" class="lucide-btn-sm"></i>
+    <span>Nova Venda</span>
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-body p-0 p-md-3">
+    <table class="table table-striped mb-0 table-responsive-stack">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Cliente</th>
+          <th>Quantidade</th>
+          <th>Total</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sale in sales %}
+        <tr>
+          <td data-label="Produto">{{ sale.product.name }}</td>
+          <td data-label="Cliente">{{ sale.customer.name|default:'—' }}</td>
+          <td data-label="Quantidade">{{ sale.quantity }}</td>
+          <td data-label="Total">R$ {{ sale.total_price }}</td>
+          <td data-label="Data">{{ sale.sold_at }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center text-muted py-4">
+            <i data-lucide="inbox" class="lucide-empty"></i>
+            <div class="mt-2">Nenhuma venda registrada.</div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
