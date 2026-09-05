@@ -20,3 +20,8 @@ class CompanySerializer(serializers.ModelSerializer):
         model = Company
         fields = ['id', 'name', 'email', 'phone_number', 'address', 'revenue', 'owner']
         read_only_fields = ['id', 'revenue', 'owner']
+class SaleSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Sale
+        fields = ['id', 'product', 'customer', 'company', 'quantity', 'total_price', 'sold_at']
+        read_only_fields = ['id', 'total_price', 'sold_at']

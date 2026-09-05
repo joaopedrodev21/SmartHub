@@ -1,14 +1,16 @@
-from rest_framework import generics, permissions, status, viewsets
+from rest_framework import filters, generics, permissions, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from apps.customers.models import Company
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from apps.customers.permissions import IsCompanyOwner
 from .models import Product
 from .serializers import ProductSerializer, CustomerSerializer, CompanySerializer
-
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.validators import validate_email
 
 # Auth para Regitro de usuários 
 @api_view(['POST'])
@@ -21,6 +23,16 @@ def register(request):
 
     if not username or not email or not password:
         return Response({'error': 'Preencha todos os campos'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        validate_email(email)
+    except DjangoValidationError as e:
+        return Response({'error': list(e.messages)}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        validate_password(password)
+    except DjangoValidationError as e:
+        return Response({'error': list(e.messages)}, status=status.HTTP_400_BAD_REQUEST)
 
     if User.objects.filter(username=username).exists():
         return Response({'error': 'Usuário já existe'}, status=status.HTTP_400_BAD_REQUEST)
@@ -71,6 +83,10 @@ def login(request):
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'description', 'brand', 'category']
+    ordering_fields = ['name', 'price', 'stock', 'created_at']
+    ordering = ['-created_at']
 
     def get_queryset(self):
         return Product.objects.filter(company__owner=self.request.user)
@@ -96,20 +112,13 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 # Company Revenue (só dono)
 class CompanyRevenueAPIView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsCompanyOwner]
 
     def get(self, request):
-        try:
-            company = request.user.companies.first()
-            if not company:
-                return Response({'error': 'Nenhuma empresa encontrada'}, status=status.HTTP_404_NOT_FOUND)
-
-            if company.owner != request.user:
-                return Response({'error': 'Acesso negado'}, status=status.HTTP_403_FORBIDDEN)
-
-            return Response({
-                'company': company.name,
-                'revenue': company.revenue,
-            })
-        except Exception:
-            return Response({'error': 'Erro ao buscar faturamento'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        company = request.user.companies.first()
+        if not company:
+            return Response({'error': 'Nenhuma empresa encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({
+            'company': company.name,
+            'revenue': company.revenue,
+        })
