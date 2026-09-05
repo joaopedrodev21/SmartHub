@@ -1,6 +1,8 @@
 from rest_framework import filters, generics, permissions, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema, inline_serializer
+from rest_framework import serializers as drf_serializers
 from django.contrib.auth.models import User
 from apps.customers.models import Company
 from django.contrib.auth import authenticate
@@ -12,7 +14,42 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import validate_email
 
-# Auth para Regitro de usuários 
+# Auth para Registro de usuários
+@extend_schema(
+    tags=['Autenticação'],
+    summary='Registro de novo usuário/empresa',
+    description='Cria um usuário e uma empresa associada, retornando os tokens JWT.',
+    request=inline_serializer(
+        name='RegisterRequest',
+        fields={
+            'username': drf_serializers.CharField(),
+            'email': drf_serializers.EmailField(),
+            'password': drf_serializers.CharField(write_only=True),
+            'company_name': drf_serializers.CharField(required=False),
+        },
+    ),
+    responses={
+        201: inline_serializer(
+            name='RegisterResponse',
+            fields={
+                'refresh': drf_serializers.CharField(),
+                'access': drf_serializers.CharField(),
+                'user': inline_serializer(
+                    name='UserInfo',
+                    fields={
+                        'id': drf_serializers.IntegerField(),
+                        'username': drf_serializers.CharField(),
+                        'email': drf_serializers.EmailField(),
+                    },
+                ),
+            },
+        ),
+        400: inline_serializer(
+            name='ErrorResponse',
+            fields={'error': drf_serializers.ListField(child=drf_serializers.CharField())},
+        ),
+    },
+)
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def register(request):
@@ -55,7 +92,40 @@ def register(request):
         }
     })
 
-#Auth para Login de usuários
+# Auth para Login de usuários
+@extend_schema(
+    tags=['Autenticação'],
+    summary='Login de usuário',
+    description='Autentica um usuário e retorna os tokens JWT (access e refresh).',
+    request=inline_serializer(
+        name='LoginRequest',
+        fields={
+            'username': drf_serializers.CharField(),
+            'password': drf_serializers.CharField(write_only=True),
+        },
+    ),
+    responses={
+        200: inline_serializer(
+            name='LoginResponse',
+            fields={
+                'refresh': drf_serializers.CharField(),
+                'access': drf_serializers.CharField(),
+                'user': inline_serializer(
+                    name='UserInfoLogin',
+                    fields={
+                        'id': drf_serializers.IntegerField(),
+                        'username': drf_serializers.CharField(),
+                        'email': drf_serializers.EmailField(),
+                    },
+                ),
+            },
+        ),
+        401: inline_serializer(
+            name='ErrorResponse401',
+            fields={'error': drf_serializers.CharField()},
+        ),
+    },
+)
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def login(request):
@@ -87,6 +157,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'description', 'brand', 'category']
     ordering_fields = ['name', 'price', 'stock', 'created_at']
     ordering = ['-created_at']
+    lookup_value_regex = r'\d+'
 
     def get_queryset(self):
         return Product.objects.filter(company__owner=self.request.user)
@@ -102,6 +173,21 @@ class ProductViewSet(viewsets.ModelViewSet):
         serializer.save(company=company)
 
     @action(detail=True, methods=['get'], url_path='stock')
+    @extend_schema(
+        tags=['Produtos'],
+        summary='Consultar estoque do produto',
+        description='Retorna o estoque atual de um produto específico.',
+        responses={
+            200: inline_serializer(
+                name='StockResponse',
+                fields={
+                    'id': drf_serializers.IntegerField(),
+                    'name': drf_serializers.CharField(),
+                    'stock': drf_serializers.IntegerField(),
+                },
+            ),
+        },
+    )
     def stock(self, request, pk=None):
         product = self.get_object()
         return Response({
@@ -114,6 +200,24 @@ class ProductViewSet(viewsets.ModelViewSet):
 class CompanyRevenueAPIView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated, IsCompanyOwner]
 
+    @extend_schema(
+        tags=['Empresa'],
+        summary='Faturamento da empresa',
+        description='Retorna o nome e o faturamento total da empresa do usuário autenticado.',
+        responses={
+            200: inline_serializer(
+                name='CompanyRevenueResponse',
+                fields={
+                    'company': drf_serializers.CharField(),
+                    'revenue': drf_serializers.DecimalField(max_digits=15, decimal_places=2),
+                },
+            ),
+            404: inline_serializer(
+                name='ErrorResponse404',
+                fields={'error': drf_serializers.CharField()},
+            ),
+        },
+    )
     def get(self, request):
         company = request.user.companies.first()
         if not company:

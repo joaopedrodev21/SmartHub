@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     # Terceiros
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_spectacular',
 
     # Seus apps
     'apps.products',
@@ -183,11 +184,34 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+
+# drf-spectacular (OpenAPI/Swagger)
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'SmartHub CRM API',
+    'DESCRIPTION': (
+        'API do SmartHub CRM para gestão de vendas e estoque de uma loja de '
+        'hardware e eletrônicos. Autenticação via JWT (Simple JWT): obtenha um '
+        'token em "auth/login/", copie-o e use o botão "Authorize" para testar '
+        'os endpoints protegidos.'
+    ),
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
+    'TAGS': [
+        {'name': 'Autenticação', 'description': 'Registro, login e refresh de tokens JWT.'},
+        {'name': 'Produtos', 'description': 'CRUD de produtos e consulta de estoque.'},
+        {'name': 'Empresa', 'description': 'Informações e métricas da empresa.'},
+    ],
+    'SWAGGER_UI_SETTINGS': {
+        'persistAuthorization': True,
+    },
 }
 
