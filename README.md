@@ -32,9 +32,11 @@ O SmartHub CRM é um sistema de gestão empresarial que permite cadastrar e gere
 
 - Registro de usuários (cria empresa automaticamente)
 - Login de usuários (retorna tokens JWT)
+- Refresh do access token (renovação de sessão via refresh token)
 - CRUD completo de produtos (somente para usuários autenticados)
 - Detalhes do produto com estoque
 - Faturamento da empresa (somente o dono da empresa pode acessar)
+- Busca, ordenação e paginação na listagem de produtos
 - Visualização via ViewSets e Routers (DefaultRouter)
 
 ---
@@ -170,15 +172,19 @@ docker-compose exec web python manage.py createsuperuser
 
 ### Testes automatizados
 
-Rode os testes do app de produtos (a execução conjunta de múltiplos apps pode gerar conflito de módulo `tests` no Python 3.14, por isso recomenda-se rodar um por vez):
+Rode os testes app por app (a execução conjunta de múltiplos apps pode gerar conflito de módulo `tests` no Python 3.14):
 
 ```bash
 python manage.py test apps.products -v 1
+python manage.py test apps.sales -v 1
+python manage.py test apps.customers -v 1
 ```
 
 **Com Docker:**
 ```bash
 docker-compose exec web python manage.py test apps.products -v 1
+docker-compose exec web python manage.py test apps.sales -v 1
+docker-compose exec web python manage.py test apps.customers -v 1
 ```
 
 ### Testar o envio de email (SMTP do Gmail)
@@ -213,6 +219,7 @@ python manage.py shell -c "from django.core.mail import send_mail; from django.c
 |--------|-----------------------------|------------------------------------|--------------|
 | POST   | `/api/auth/register/`       | Criar conta (cria empresa)          | Pública      |
 | POST   | `/api/auth/login/`          | Login (retorna tokens JWT)          | Pública      |
+| POST   | `/api/auth/refresh/`        | Renovar o access token              | Refresh Token |
 | GET    | `/api/products/`            | Listar produtos da empresa          | JWT          |
 | POST   | `/api/products/`            | Cadastrar produto                   | JWT          |
 | GET    | `/api/products/{id}/`       | Detalhes do produto                 | JWT          |
@@ -221,6 +228,27 @@ python manage.py shell -c "from django.core.mail import send_mail; from django.c
 | DELETE | `/api/products/{id}/`       | Remover produto                     | JWT          |
 | GET    | `/api/products/{id}/stock/` | Detalhes do estoque do produto      | JWT          |
 | GET    | `/api/company/revenue/`     | Faturamento (somente o dono)        | JWT          |
+
+### Filtros, Ordenação e Paginação
+
+A listagem de produtos suporta filtro por busca, ordenação e paginação:
+
+| Parâmetro  | Exemplo                                  | Descrição                                            |
+|------------|------------------------------------------|------------------------------------------------------|
+| `search`   | `/api/products/?search=gamer`            | Busca em nome, descrição, marca e categoria          |
+| `ordering` | `/api/products/?ordering=-price`         | Ordena por campo (`-` para decrescente). Campos: `name`, `price`, `stock`, `created_at` |
+| `page`     | `/api/products/?page=2`                  | Página da paginação (10 itens por página)            |
+
+A resposta da listagem é paginada no formato:
+
+```json
+{
+  "count": 15,
+  "next": "http://.../api/products/?page=2",
+  "previous": null,
+  "results": [ ... ]
+}
+```
 
 Para autenticar, envie o token no header:
 

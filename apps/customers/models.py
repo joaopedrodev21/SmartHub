@@ -2,7 +2,7 @@ from django.db import models
 
 class Customer(models.Model):
     name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.EmailField()
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     company = models.ForeignKey('customers.Company', on_delete=models.CASCADE, related_name='customers', null=True, blank=True)
@@ -11,6 +11,11 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['email', 'company'], name='unique_customer_email_per_company')
+        ]
 
 class Company (models.Model):
     name = models.CharField(max_length=100)
