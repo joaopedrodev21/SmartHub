@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from django.contrib.auth import views as auth_views
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+    SpectacularRedocView,
+)
 from apps.products.views import home, dashboard, login_view, register_view, logout_view, profile_view
 
 urlpatterns = [
@@ -52,4 +57,9 @@ urlpatterns = [
     ), name='password_reset_complete'),
     path('api/', include('apps.api.urls')),
     path('customers/', include('apps.customers.urls')),
+    # Documentação da API (drf-spectacular)
+    path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='api-schema'), name='api-docs'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='api-schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='api-schema'), name='redoc'),
 ]

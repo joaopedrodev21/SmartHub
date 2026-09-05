@@ -38,6 +38,7 @@ O SmartHub CRM é um sistema de gestão empresarial que permite cadastrar e gere
 - Faturamento da empresa (somente o dono da empresa pode acessar)
 - Busca, ordenação e paginação na listagem de produtos
 - Visualização via ViewSets e Routers (DefaultRouter)
+- **Documentação interativa** da API via Swagger UI/Redoc com `drf-spectacular` (OpenAPI 3)
 
 ---
 
@@ -47,6 +48,7 @@ O SmartHub CRM é um sistema de gestão empresarial que permite cadastrar e gere
 - Django 6
 - Django REST Framework
 - djangorestframework-simplejwt (autenticação JWT)
+- drf-spectacular (documentação OpenAPI 3 / Swagger UI / Redoc)
 - SQLite (desenvolvimento) / PostgreSQL (produção)
 - Bootstrap 5 e Lucide (interface)
 - Docker e Docker Compose (containerização)
@@ -228,6 +230,9 @@ python manage.py shell -c "from django.core.mail import send_mail; from django.c
 | DELETE | `/api/products/{id}/`       | Remover produto                     | JWT          |
 | GET    | `/api/products/{id}/stock/` | Detalhes do estoque do produto      | JWT          |
 | GET    | `/api/company/revenue/`     | Faturamento (somente o dono)        | JWT          |
+| GET    | `/api/docs/`                | Documentação interativa (Swagger UI) | Pública      |
+| GET    | `/api/schema/`              | Schema OpenAPI 3                     | Pública      |
+| GET    | `/api/schema/redoc/`        | Documentação Redoc                   | Pública      |
 
 ### Filtros, Ordenação e Paginação
 
@@ -255,6 +260,33 @@ Para autenticar, envie o token no header:
 ```
 Authorization: Bearer <access_token>
 ```
+
+---
+
+## Documentação da API (Swagger)
+
+A API é documentada automaticamente com [drf-spectacular](https://drf-spectacular.readthedocs.io/), que gera um schema OpenAPI 3 e uma interface interativa e navegável para testar os endpoints.
+
+### URLs de documentação
+
+| Página | URL |
+|--------|-----|
+| **Swagger UI** (interface navegável) | `/api/docs/` |
+| Swagger UI (padrão) | `/api/schema/swagger-ui/` |
+| Redoc (documentação em coluna única) | `/api/schema/redoc/` |
+| Schema OpenAPI 3 (JSON crú) | `/api/schema/` |
+
+Com o servidor rodando (`python manage.py runserver`), acesse **http://127.0.0.1:8000/api/docs/** no navegador.
+
+### Como usar o Swagger (com autenticação JWT)
+
+1. Abra `/api/docs/`
+2. Expanda **`POST /api/auth/register/`** (cria usuário + empresa e retorna os tokens) ou **`POST /api/auth/login/`** (se já tiver conta)
+3. Copie o valor do token **`access`** retornado
+4. Clique no botão **Authorize** (cadeado, no topo da página), cole o token e confirme
+5. Teste os endpoints protegidos (produtos, estoque e faturamento) direto pelo botão **"Try it out"**
+
+> O `persistAuthorization` está habilitado, então o token permanece salvo entre as requisições. As respostas de `register`/`login` retornam o par `access`/`refresh`; use `/api/auth/refresh/` para renovar o token quando o `access` expirar.
 
 ---
 
