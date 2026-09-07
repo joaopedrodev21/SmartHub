@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}Clientes - SmartHub CRM{% endblock %}
+{% block page_title %}Clientes{% endblock %}
 
 {% block content %}
 <div class="page-header">
@@ -36,11 +37,11 @@
                             <td data-label="Endereço">{{ customer.address|default:'-' }}</td>
                             <td data-label="Ações" class="text-end">
                                 <div class="d-flex gap-1 justify-content-end">
-                                    <a href="{% url 'customers:customer_update' customer.pk %}" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1">
+                                    <a href="{% url 'customers:customer_update' customer.pk %}" class="action-btn edit">
                                         <i data-lucide="pencil" class="lucide-btn-sm"></i>
                                         <span>Editar</span>
                                     </a>
-                                    <a href="{% url 'customers:customer_delete' customer.pk %}" class="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1">
+                                    <a href="{% url 'customers:customer_delete' customer.pk %}" class="action-btn delete">
                                         <i data-lucide="trash-2" class="lucide-btn-sm"></i>
                                         <span>Excluir</span>
                                     </a>

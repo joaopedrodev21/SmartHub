@@ -5,7 +5,10 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.db.models import Sum
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncMonth, TruncDay
+from django.utils import timezone
+from datetime import timedelta
 from django.contrib import messages
 
 from .models import Product
@@ -19,18 +22,75 @@ def home(request):
 
 @login_required
 def dashboard(request):
-    total_products = Product.objects.filter(company__owner=request.user).count()
-    total_stock = Product.objects.filter(company__owner=request.user).aggregate(Sum('stock'))['stock__sum'] or 0
+    products = Product.objects.filter(company__owner=request.user)
+    sales = Sale.objects.filter(company__owner=request.user)
+
+    total_products = products.count()
+    total_stock = products.aggregate(Sum('stock'))['stock__sum'] or 0
     total_revenue = Company.objects.filter(owner=request.user).aggregate(Sum('revenue'))['revenue__sum'] or 0
-    total_sales = Sale.objects.filter(company__owner=request.user).count()
-    recent_sales = Sale.objects.select_related('product', 'customer').filter(company__owner=request.user).order_by('-sold_at')[:5]
+    total_sales = sales.count()
+    recent_sales = sales.select_related('product', 'customer').order_by('-sold_at')[:5]
+
+    now = timezone.now()
+
+    # ---- Faturamento por mês (últimos 6 meses) ----
+    revenue_by_month = []
+    for i in range(5, -1, -1):
+        month_start = now.replace(day=1) - timedelta(days=30 * i)
+        revenue_by_month.append({'label': month_start.strftime('%b/%y'), 'value': 0})
+
+    months_agg = (
+        sales.annotate(month=TruncMonth('sold_at'))
+        .values('month')
+        .annotate(total=Sum('total_price'))
+    )
+    for row in months_agg:
+        label = row['month'].strftime('%b/%y')
+        for entry in revenue_by_month:
+            if entry['label'] == label:
+                entry['value'] = float(row['total'] or 0)
+
+    # ---- Vendas por dia (últimos 14 dias) ----
+    sales_by_day = []
+    for i in range(13, -1, -1):
+        day = (now - timedelta(days=i)).date()
+        sales_by_day.append({'label': day.strftime('%d/%m'), 'value': 0})
+
+    days_agg = (
+        sales.annotate(day=TruncDay('sold_at'))
+        .values('day')
+        .annotate(total=Count('id'))
+    )
+    for row in days_agg:
+        label = row['day'].strftime('%d/%m')
+        for entry in sales_by_day:
+            if entry['label'] == label:
+                entry['value'] = row['total']
+
+    # ---- Produtos por categoria ----
+    cat_map = dict(Product.CATEGORY_CHOICES)
+    category_count = [
+        {'label': cat_map.get(c['category'], c['category'] or 'Outros'), 'value': c['total']}
+        for c in products.values('category').annotate(total=Count('id'))
+    ]
+
+    # ---- Ticket médio ----
+    average_ticket = (total_revenue / total_sales) if total_sales else 0
+
+    chart_data = {
+        'revenue_by_month': revenue_by_month,
+        'sales_by_day': sales_by_day,
+        'category_count': category_count,
+    }
 
     context = {
         'total_products': total_products,
         'total_stock': total_stock,
         'total_revenue': total_revenue,
         'total_sales': total_sales,
+        'average_ticket': average_ticket,
         'recent_sales': recent_sales,
+        'chart_data': chart_data,
     }
     return render(request, 'dashboard.html', context)
 

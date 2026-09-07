@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Dashboard - SmartHub CRM{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}
 {% block content %}
 
 <div class="page-header">
@@ -9,95 +15,127 @@
   </div>
 </div>
 
-<div class="row g-3 g-md-4 mb-4 dashboard-stats">
-  <div class="col-12 col-sm-6 col-lg-3">
-    <div class="card text-center h-100 border-primary">
-      <div class="card-body">
-        <div class="d-flex justify-content-center mb-2">
-            <i data-lucide="package" class="lucide-card text-primary"></i>
+<div class="row g-3 g-md-4 mb-4">
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="stat-panel">
+      <div class="d-flex align-items-center gap-3">
+        <span class="stat-icon"><i data-lucide="dollar-sign"></i></span>
+        <div>
+          <p class="stat-label">Faturamento</p>
+          <p class="stat-value mb-1">R$ {{ total_revenue|floatformat:2 }}</p>
         </div>
-        <h5 class="card-title text-primary">Produtos</h5>
-        <p class="display-6 fw-bold mb-1">{{ total_products }}</p>
-        <p class="text-muted mb-0 small">Total de produtos cadastrados</p>
+      </div>
+      <small class="stat-trend up"><i data-lucide="trending-up" class="lucide-btn-sm"></i> Faturamento total acumulado</small>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="stat-panel">
+      <div class="d-flex align-items-center gap-3">
+        <span class="stat-icon"><i data-lucide="shopping-cart"></i></span>
+        <div>
+          <p class="stat-label">Vendas</p>
+          <p class="stat-value mb-1">{{ total_sales }}</p>
+        </div>
+      </div>
+      <small class="text-muted">Total de vendas realizadas</small>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="stat-panel">
+      <div class="d-flex align-items-center gap-3">
+        <span class="stat-icon"><i data-lucide="boxes"></i></span>
+        <div>
+          <p class="stat-label">Estoque</p>
+          <p class="stat-value mb-1">{{ total_stock }}</p>
+        </div>
+      </div>
+      <small class="text-muted">Unidades em estoque</small>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="stat-panel">
+      <div class="d-flex align-items-center gap-3">
+        <span class="stat-icon"><i data-lucide="package"></i></span>
+        <div>
+          <p class="stat-label">Produtos</p>
+          <p class="stat-value mb-1">{{ total_products }}</p>
+        </div>
+      </div>
+      <small class="text-muted">Ticket médio: <strong>R$ {{ average_ticket|floatformat:2 }}</strong></small>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 g-md-4 mb-4">
+  <div class="col-lg-7">
+    <div class="card chart-card h-100">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i data-lucide="activity" class="lucide-card-header"></i>
+        <h5 class="mb-0">Faturamento (últimos 6 meses)</h5>
+      </div>
+      <div class="card-body">
+        <div class="chart-box"><canvas id="chart-revenue"></canvas></div>
       </div>
     </div>
   </div>
-  <div class="col-12 col-sm-6 col-lg-3">
-    <div class="card text-center h-100 border-success">
-      <div class="card-body">
-        <div class="d-flex justify-content-center mb-2">
-            <i data-lucide="boxes" class="lucide-card text-success"></i>
-        </div>
-        <h5 class="card-title text-success">Estoque</h5>
-        <p class="display-6 fw-bold mb-1">{{ total_stock }}</p>
-        <p class="text-muted mb-0 small">Unidades em estoque</p>
+  <div class="col-lg-5">
+    <div class="card chart-card h-100">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i data-lucide="pie-chart" class="lucide-card-header"></i>
+        <h5 class="mb-0">Produtos por categoria</h5>
       </div>
-    </div>
-  </div>
-  <div class="col-12 col-sm-6 col-lg-3">
-    <div class="card text-center h-100 border-warning">
       <div class="card-body">
-        <div class="d-flex justify-content-center mb-2">
-            <i data-lucide="dollar-sign" class="lucide-card text-warning"></i>
-        </div>
-        <h5 class="card-title text-warning">Faturamento</h5>
-        <p class="display-6 fw-bold mb-1">R$ {{ total_revenue|floatformat:2 }}</p>
-        <p class="text-muted mb-0 small">Faturamento total</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-sm-6 col-lg-3">
-    <div class="card text-center h-100 border-info">
-      <div class="card-body">
-        <div class="d-flex justify-content-center mb-2">
-            <i data-lucide="shopping-cart" class="lucide-card text-info"></i>
-        </div>
-        <h5 class="card-title text-info">Vendas</h5>
-        <p class="display-6 fw-bold mb-1">{{ total_sales }}</p>
-        <p class="text-muted mb-0 small">Total de vendas realizadas</p>
+        <div class="chart-box"><canvas id="chart-category"></canvas></div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+<div class="row g-3 g-md-4 mb-4">
+  <div class="col-lg-7">
+    <div class="card chart-card">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i data-lucide="bar-chart-3" class="lucide-card-header"></i>
+        <h5 class="mb-0">Vendas (últimos 14 dias)</h5>
+      </div>
+      <div class="card-body">
+        <div class="chart-box"><canvas id="chart-sales"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center gap-2">
         <h5 class="mb-0 d-flex align-items-center gap-2">
-            <i data-lucide="history" class="lucide-card-header"></i>
-            Últimas Vendas
+          <i data-lucide="history" class="lucide-card-header"></i>
+          Últimas Vendas
         </h5>
-        <a href="{% url 'sales:sale_list' %}" class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1">
-            <i data-lucide="list" class="lucide-btn-sm"></i>
-            <span>Ver Todas</span>
+        <a href="{% url 'sales:sale_list' %}" class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1 text-nowrap">
+          <i data-lucide="list" class="lucide-btn-sm"></i>
+          <span>Ver detalhe</span>
         </a>
       </div>
-      <div class="card-body p-0 p-md-3">
-        <table class="table table-sm mb-0 table-responsive-stack">
+      <div class="card-body p-0">
+        <table class="table table-sm mb-0 table-striped table-hover align-middle table-responsive-stack w-100">
           <thead>
             <tr>
-              <th>Produto</th>
-              <th>Cliente</th>
-              <th>Quantidade</th>
-              <th>Total</th>
-              <th>Data</th>
+              <th>Producto</th>
+              <th class="text-center">Quantidade</th>
+              <th class="text-end">Total</th>
             </tr>
           </thead>
           <tbody>
             {% for sale in recent_sales %}
             <tr>
-              <td data-label="Produto">{{ sale.product.name }}</td>
-              <td data-label="Cliente">{{ sale.customer.name|default:'—' }}</td>
-              <td data-label="Quantidade">{{ sale.quantity }}</td>
-              <td data-label="Total">R$ {{ sale.total_price }}</td>
-              <td data-label="Data">{{ sale.sold_at|date:"d/m/Y H:i" }}</td>
+              <td data-label="Producto" class="product-cell" title="{{ sale.product.name }}">{{ sale.product.name }}</td>
+              <td data-label="Qtd" class="text-center">{{ sale.quantity }}</td>
+              <td data-label="Total" class="text-end mono text-nowrap">R$ {{ sale.total_price }}</td>
             </tr>
             {% empty %}
             <tr>
-              <td colspan="5" class="text-center text-muted py-4">
+              <td colspan="3" class="text-center text-muted py-4">
                 <i data-lucide="inbox" class="lucide-empty"></i>
-                <div class="mt-2">Nenhuma venda realizada.</div>
+                <div class="mt-2">Nenhuma venta realizada.</div>
               </td>
             </tr>
             {% endfor %}
@@ -107,5 +145,7 @@
     </div>
   </div>
 </div>
+
+{{ chart_data|json_script:"chart-data" }}
 
 {% endblock %}

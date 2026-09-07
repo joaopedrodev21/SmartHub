@@ -2,18 +2,12 @@
 {% block title %}Login - SmartHub CRM{% endblock %}
 {% block content %}
 
-<style>
-  /* Hide main navigation links and toggler on the login page */
-  .navbar .navbar-nav,
-  .navbar .navbar-toggler { display: none !important; }
-</style>
-
-<div class="row justify-content-center">
+<div class="row justify-content-center align-items-center" style="min-height: 75vh;">
   <div class="col-12 col-sm-10 col-md-6 col-lg-4">
-    <div class="card">
+    <div class="card auth-card">
       <div class="card-header text-center">
         <div class="d-flex justify-content-center mb-2">
-            <i data-lucide="lock" class="lucide-card"></i>
+            <i data-lucide="gamepad-2" class="lucide-card" style="color: var(--green);"></i>
         </div>
         <h4 class="mb-0">Login</h4>
       </div>
