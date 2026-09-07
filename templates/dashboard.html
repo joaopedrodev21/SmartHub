@@ -119,7 +119,7 @@
         <table class="table table-sm mb-0 table-striped table-hover align-middle table-responsive-stack w-100">
           <thead>
             <tr>
-              <th>Producto</th>
+              <th>Produto</th>
               <th class="text-center">Quantidade</th>
               <th class="text-end">Total</th>
             </tr>
@@ -127,7 +127,7 @@
           <tbody>
             {% for sale in recent_sales %}
             <tr>
-              <td data-label="Producto" class="product-cell" title="{{ sale.product.name }}">{{ sale.product.name }}</td>
+                            <td data-label="Produto" class="product-cell stack-col" title="{{ sale.product.name }}">{{ sale.product.name }}</td>
               <td data-label="Qtd" class="text-center">{{ sale.quantity }}</td>
               <td data-label="Total" class="text-end mono text-nowrap">R$ {{ sale.total_price }}</td>
             </tr>
@@ -135,7 +135,7 @@
             <tr>
               <td colspan="3" class="text-center text-muted py-4">
                 <i data-lucide="inbox" class="lucide-empty"></i>
-                <div class="mt-2">Nenhuma venta realizada.</div>
+                <div class="mt-2">Nenhuma venda realizada.</div>
               </td>
             </tr>
             {% endfor %}
