@@ -667,9 +667,33 @@ footer {
     margin-right: 12px;
     flex-shrink: 0;
   }
-  .table-responsive-stack td.text-end,
+    .table-responsive-stack td.text-end,
   .table-responsive-stack td[data-label="Ações"] { justify-content: flex-end; }
   .table-responsive-stack .d-flex.gap-1 { justify-content: flex-end; }
+  /* Conteúdo longo (e-mail, endereço) não deve estourar a linha */
+  .table-responsive-stack td {
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    min-width: 0;
+  }
+  /* Colunas de texto longo: label acima do valor, ocupando a largura toda */
+  .table-responsive-stack td.stack-col {
+    display: block;
+    text-align: left;
+  }
+  .table-responsive-stack td.stack-col::before {
+    display: block;
+    margin: 0 0 4px;
+  }
+  /* Nomes longos (produto/cliente) não devem ser cortados no mobile */
+  .table-responsive-stack .product-cell {
+    max-width: none;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .table-responsive-stack td.text-center { justify-content: center; }
 }
 
 /* Fallback: scroll horizontal para tabelas sem data-label */

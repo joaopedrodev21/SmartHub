@@ -32,9 +32,9 @@
                     {% for customer in customers %}
                         <tr>
                             <td data-label="Nome">{{ customer.name }}</td>
-                            <td data-label="Email">{{ customer.email }}</td>
+                            <td data-label="Email" class="stack-col">{{ customer.email }}</td>
                             <td data-label="Telefone">{{ customer.phone_number|default:'-' }}</td>
-                            <td data-label="Endereço">{{ customer.address|default:'-' }}</td>
+                            <td data-label="Endereço" class="stack-col">{{ customer.address|default:'-' }}</td>
                             <td data-label="Ações" class="text-end">
                                 <div class="d-flex gap-1 justify-content-end">
                                     <a href="{% url 'customers:customer_update' customer.pk %}" class="action-btn edit">
