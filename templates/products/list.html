@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Produtos - SmartHub CRM{% endblock %}
+{% block page_title %}Produtos{% endblock %}
 {% block content %}
 
 <div class="page-header">
@@ -13,9 +14,9 @@
   </a>
 </div>
 
-<div class="card">
+<div class="card shadow-sm">
   <div class="card-body p-0 p-md-3">
-    <table class="table table-striped mb-0 table-responsive-stack">
+    <table class="table table-striped table-hover align-middle mb-0 table-responsive-stack">
       <thead>
         <tr>
           <th>Nome</th>
@@ -29,18 +30,28 @@
       <tbody>
         {% for product in products %}
         <tr>
-          <td data-label="Nome">{{ product.name }}</td>
-          <td data-label="Categoria">{{ product.get_category_display }}</td>
-          <td data-label="Marca">{{ product.brand }}</td>
-          <td data-label="Preço">R$ {{ product.price }}</td>
-          <td data-label="Estoque">{{ product.stock }}</td>
+          <td data-label="Nome"><strong>{{ product.name }}</strong></td>
+          <td data-label="Categoria">
+            <span class="badge-category cat-{{ product.category }}">{{ product.get_category_display }}</span>
+          </td>
+          <td data-label="Marca">{{ product.brand|default:'—' }}</td>
+          <td data-label="Preço" class="mono">R$ {{ product.price }}</td>
+          <td data-label="Estoque">
+            {% if product.stock == 0 %}
+              <span class="stock-badge out"><i data-lucide="alert-triangle" class="lucide-btn-sm"></i> {{ product.stock }}</span>
+            {% elif product.stock <= 3 %}
+              <span class="stock-badge low"><i data-lucide="alert-triangle" class="lucide-btn-sm"></i> {{ product.stock }}</span>
+            {% else %}
+              <span class="stock-badge ok"><i data-lucide="check" class="lucide-btn-sm"></i> {{ product.stock }}</span>
+            {% endif %}
+          </td>
           <td data-label="Ações" class="text-end">
             <div class="d-flex gap-1 justify-content-end">
-              <a href="{% url 'products:product_update' product.pk %}" class="btn btn-sm btn-warning d-inline-flex align-items-center gap-1">
+              <a href="{% url 'products:product_update' product.pk %}" class="action-btn edit">
                 <i data-lucide="pencil" class="lucide-btn-sm"></i>
                 <span>Editar</span>
               </a>
-              <a href="{% url 'products:product_delete' product.pk %}" class="btn btn-sm btn-danger d-inline-flex align-items-center gap-1">
+              <a href="{% url 'products:product_delete' product.pk %}" class="action-btn delete">
                 <i data-lucide="trash-2" class="lucide-btn-sm"></i>
                 <span>Excluir</span>
               </a>

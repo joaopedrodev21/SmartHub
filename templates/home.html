@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Início - SmartHub CRM{% endblock %}
+{% block page_title %}Início{% endblock %}
 {% block content %}
 
 <div class="hero p-4 p-md-5 mb-4 mb-md-5 text-center">
@@ -45,11 +46,11 @@
     <div class="card h-100">
       <div class="card-body text-center d-flex flex-column h-100">
         <div class="d-flex justify-content-center mb-3">
-            <i data-lucide="layout-dashboard" class="lucide-card text-warning"></i>
+            <i data-lucide="layout-dashboard" class="lucide-card text-success"></i>
         </div>
         <h5 class="card-title">Dashboard</h5>
         <p class="card-text text-muted">Acompanhe métricas da loja</p>
-        <a href="{% url 'dashboard' %}" class="btn btn-warning text-dark w-100 d-inline-flex align-items-center justify-content-center gap-2 mt-auto">
+        <a href="{% url 'dashboard' %}" class="btn btn-success w-100 d-inline-flex align-items-center justify-content-center gap-2 mt-auto">
             <i data-lucide="arrow-right" class="lucide-btn-sm"></i>
             <span>Ver Dashboard</span>
         </a>

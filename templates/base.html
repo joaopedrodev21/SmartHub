@@ -1,95 +1,93 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}SmartHub CRM{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <script src="{% static 'js/theme.js' %}"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    {% block head %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
-                <i data-lucide="gamepad-2" class="lucide-nav-brand"></i>
-                <span>SmartHub CRM</span>
-            </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menu">
-                <i data-lucide="menu" class="lucide-toggler"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-2" href="{% url 'dashboard' %}">
-                            <i data-lucide="layout-dashboard" class="lucide-nav"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-2" href="{% url 'products:product_list' %}">
-                            <i data-lucide="package" class="lucide-nav"></i>
-                            <span>Produtos</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-2" href="{% url 'sales:sale_list' %}">
-                            <i data-lucide="shopping-cart" class="lucide-nav"></i>
-                            <span>Vendas</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-2" href="{% url 'customers:customer_list' %}">
-                            <i data-lucide="users" class="lucide-nav"></i>
-                            <span>Clientes</span>
-                        </a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center gap-2 navbar-user">
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'profile' %}" class="text-light d-flex align-items-center gap-1 text-decoration-none nav-user-link">
-                            <i data-lucide="user" class="lucide-nav"></i>
-                            <span class="user-name">{{ user.username }}</span>
-                        </a>
-                        <form method="post" action="{% url 'logout' %}" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-light btn-sm d-flex align-items-center gap-1 nav-logout-btn">
-                                <i data-lucide="log-out" class="lucide-btn-sm"></i>
-                                <span>Sair</span>
-                            </button>
-                        </form>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm d-flex align-items-center gap-1">
-                            <i data-lucide="log-in" class="lucide-btn-sm"></i>
-                            <span>Entrar</span>
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
+<div class="app-shell">
+
+    <aside class="sidebar" aria-label="Menu principal">
+        <a class="sidebar-brand" href="{% url 'home' %}">
+            <i data-lucide="gamepad-2" class="lucide-nav-brand brand-icon"></i>
+            <span>SmartHub CRM</span>
+        </a>
+
+        <ul class="sidebar-nav">
+            <li class="nav-label">Menu</li>
+            <li><a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <i data-lucide="layout-dashboard"></i><span>Dashboard</span></a></li>
+            <li><a href="{% url 'products:product_list' %}" class="{% if request.resolver_match.url_name == 'product_list' %}active{% endif %}">
+                <i data-lucide="package"></i><span>Produtos</span></a></li>
+            <li><a href="{% url 'sales:sale_list' %}" class="{% if request.resolver_match.url_name == 'sale_list' %}active{% endif %}">
+                <i data-lucide="shopping-cart"></i><span>Vendas</span></a></li>
+            <li><a href="{% url 'customers:customer_list' %}" class="{% if request.resolver_match.url_name == 'customer_list' %}active{% endif %}">
+                <i data-lucide="users"></i><span>Clientes</span></a></li>
+        </ul>
+
+        <div class="sidebar-footer">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="user-info">
+                    <i data-lucide="user"></i><span class="user-name">{{ user.username }}</span>
+                </a>
+                <form method="post" action="{% url 'logout' %}" class="mt-1">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-light btn-sm w-100 d-inline-flex align-items-center justify-content-center gap-2">
+                        <i data-lucide="log-out" class="lucide-btn-sm"></i><span>Sair</span>
+                    </button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm w-100 d-inline-flex align-items-center justify-content-center gap-2 mb-2">
+                    <i data-lucide="log-in" class="lucide-btn-sm"></i><span>Entrar</span>
+                </a>
+            {% endif %}
         </div>
-    </nav>
-    <main class="container py-4">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
+    </aside>
 
-        {% block content %}{% endblock %}
-    </main>
+    <div class="sidebar-backdrop"></div>
 
-    <footer class="text-center text-muted py-4">
-        <small>SmartHub CRM &copy; {% now "Y" %}</small>
-    </footer>
+    <div class="app-main">
+        <header class="topbar">
+            <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-label="Abrir menu" title="Abrir menu">
+                <i data-lucide="menu"></i>
+            </button>
+            <h1 class="topbar-title">{% block page_title %}{% endblock %}</h1>
+            <div class="topbar-spacer"></div>
+            <button class="theme-toggle" type="button" aria-label="Alternar tema" title="Alternar tema">
+                <i data-lucide="sun" data-theme-icon></i>
+            </button>
+        </header>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        lucide.createIcons();
-    </script>
-    {% block scripts %}{% endblock %}
+        <main class="app-content">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="text-center">
+            <small>SmartHub CRM &copy; {% now "Y" %} — Tech Console</small>
+        </footer>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+<script>
+    if (window.lucide) { lucide.createIcons(); }
+</script>
 </body>
 </html>
