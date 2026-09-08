@@ -634,6 +634,18 @@ footer {
    o conteúdo não deve ficar deslocado pelos 248px da sidebar */
 .app-shell.no-sidebar .app-main { margin-left: 0; }
 
+/* Empty state dos gráficos (dashboard): mensagem centrada na mesma altura do chart */
+.chart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 180px;
+  text-align: center;
+}
+.chart-empty .lucide-empty { width: 40px; height: 40px; opacity: 0.5; color: var(--muted); }
+
 /* Telas públicas (login/cadastro): centraliza o card no meio da tela */
 .app-shell.no-sidebar .app-content {
   display: flex;

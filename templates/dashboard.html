@@ -85,7 +85,14 @@
         <h5 class="mb-0">Produtos por categoria</h5>
       </div>
       <div class="card-body">
-        <div class="chart-box"><canvas id="chart-category"></canvas></div>
+        {% if not category_count %}
+          <div class="chart-empty text-center">
+            <i data-lucide="package" class="lucide-empty"></i>
+            <p class="text-muted mb-0">Você ainda não possui produtos cadastrados, crie produtos para visualizar</p>
+          </div>
+        {% else %}
+          <div class="chart-box"><canvas id="chart-category"></canvas></div>
+        {% endif %}
       </div>
     </div>
   </div>
