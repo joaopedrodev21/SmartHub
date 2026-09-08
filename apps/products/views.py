@@ -5,6 +5,7 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db import IntegrityError, transaction
 from django.db.models import Sum, Count
 from django.db.models.functions import TruncMonth, TruncDay
 from django.utils import timezone
@@ -146,6 +147,12 @@ def register_view(request):
         email = form.cleaned_data['email']
         password = form.cleaned_data['password']
 
+        # Validação amigável antes de criar (evita 500 com e-mail duplicado)
+        if (User.objects.filter(email__iexact=email).exists()
+                or Company.objects.filter(email__iexact=email).exists()):
+            form.add_error('email', 'Este e-mail já está cadastrado. Faça login ou use outro e-mail.')
+            return render(request, 'registration/register.html', {'form': form})
+
         base_username = email.split('@')[0].replace('.', '').replace('_', '')
         username = base_username
         suffix = 1
@@ -153,18 +160,26 @@ def register_view(request):
             username = f'{base_username}{suffix}'
             suffix += 1
 
-        user = User.objects.create_user(username=username, email=email, password=password)
-        user.first_name = name
-        user.save()
+        try:
+            with transaction.atomic():
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user.first_name = name
+                user.save()
 
-        company_name = form.cleaned_data.get('company_name') or f'{name} Company'
-        Company.objects.create(
-            name=company_name,
-            email=user.email,
-            owner=user,
-        )
+                company_name = form.cleaned_data.get('company_name') or f'{name} Company'
+                Company.objects.create(
+                    name=company_name,
+                    email=user.email,
+                    owner=user,
+                )
+        except IntegrityError:
+            form.add_error('email', 'Não foi possível concluir o cadastro — este e-mail já está em uso.')
+            return render(request, 'registration/register.html', {'form': form})
 
-        messages.success(request, 'Cadastro realizado com sucesso! Faça login para continuar.')
+        # Login automático: o usuário já entra autenticado no dashboard
+        login(request, user)
+
+        messages.success(request, 'Cadastro realizado com sucesso! Bem-vindo(a) ao SmartHub CRM.')
         return redirect('dashboard')
 
     return render(request, 'registration/register.html', {'form': form})
