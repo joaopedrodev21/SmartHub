@@ -127,14 +127,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# DATABASE_URL definida e não vazia em produção (Render Postgres);
-# vazia ou ausente → fallback SQLite local.
-DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(default='postgres://', conn_max_age=600),
-    }
+# DATABASE_URL validada antes de parsear: vacía, com espaços ou com
+# placeholder inválido → fallback SQLite (build não quebra no Render).
+DATABASE_URL = (os.getenv('DATABASE_URL') or '').strip()
+
+_SUPPORTED_DB_PREFIXES = (
+    'postgres://', 'postgresql://', 'pgsql://', 'postgis://',
+    'mysql://', 'spatialite://', 'sqlite://',
+)
+
+if DATABASE_URL.startswith(_SUPPORTED_DB_PREFIXES):
+    DATABASES = {'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)}
 else:
+    # Sem URL válida (local, ou placeholder vazio/inválido no Render) → SQLite
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
