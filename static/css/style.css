@@ -630,6 +630,17 @@ footer {
   .stat-panel .stat-value { font-size: 1.4rem; }
 }
 
+/* Quando a sidebar está oculta (telas públicas: login/cadastro/senha),
+   o conteúdo não deve ficar deslocado pelos 248px da sidebar */
+.app-shell.no-sidebar .app-main { margin-left: 0; }
+
+/* Telas públicas (login/cadastro): centraliza o card no meio da tela */
+.app-shell.no-sidebar .app-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+}
+
 /* Tabelas empilham em cards no mobile */
 @media (max-width: 767.98px) {
   .table-responsive-stack { display: block; }
