@@ -92,6 +92,7 @@ def dashboard(request):
         'average_ticket': average_ticket,
         'recent_sales': recent_sales,
         'chart_data': chart_data,
+        'category_count': category_count,
     }
     return render(request, 'dashboard.html', context)
 
