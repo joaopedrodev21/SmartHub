@@ -16,9 +16,10 @@ from .forms import ProductForm, EmailLoginForm, RegisterForm
 from apps.sales.models import Sale
 from apps.customers.models import Company
 
-@login_required
 def home(request):
-    return render(request, 'home.html')
+    if request.user.is_authenticated:
+        return render(request, 'home.html')
+    return render(request, 'landing.html')
 
 @login_required
 def dashboard(request):

@@ -12,8 +12,9 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-<div class="app-shell">
+<div class="app-shell{% if not user.is_authenticated %} no-sidebar{% endif %}">
 
+    {% if user.is_authenticated %}
     <aside class="sidebar" aria-label="Menu principal">
         <a class="sidebar-brand" href="{% url 'home' %}">
             <i data-lucide="gamepad-2" class="lucide-nav-brand brand-icon"></i>
@@ -49,11 +50,13 @@
                 </a>
             {% endif %}
         </div>
-    </aside>
+        </aside>
 
     <div class="sidebar-backdrop"></div>
+    {% endif %}
 
     <div class="app-main">
+        {% if user.is_authenticated %}
         <header class="topbar">
             <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-label="Abrir menu" title="Abrir menu">
                 <i data-lucide="menu"></i>
@@ -64,6 +67,7 @@
                 <i data-lucide="sun" data-theme-icon></i>
             </button>
         </header>
+        {% endif %}
 
         <main class="app-content">
             {% if messages %}
